@@ -6,30 +6,48 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:11 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/12 11:48:30 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/13 10:08:27 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "ft_printf.c"
+#include "ft_printf.h"
 
 //get it to call correctly. DONE.
 //print out all the params passed to it using the special var with print f
 //get it to print all params without printf
 //create subparse function and get it to substitute for string and for number
-//create cut function to parse and print each section of printf
+//and print out corrected for this one use case
+//REASSESS NEXT STEPS
+//
+//va_list has no idea, it will keep going forever. . .
 
-int ft_printf(const char *str, ...);
 
 int main()
 {
-	char *str = "%s:%d\n";
+	char *format = "%s:%s\n";
 	int val;
 
 
-	val = ft_printf(str, "hello world\n", 42);
-	printf(str, "tout le mond", 42);
-	printf("val:%d", val);
+	val = ft_printf(format, "hello world\n", "42\n");
+	printf("val:%d\n", val);
+
+	printf("PRINT F TESTING %\n");
+	printf("\n0:");
+	printf("");
+	printf("\n1:");
+	printf("%");
+	printf("\n2:");
+	printf("%%");
+	printf("\n3:");
+	printf("%%%");
+	printf("\n4:");
+	printf("%%%%");
+	printf("\n5:");
+	printf("%%%%%");
+	printf("\n6:");
+	printf("%%%%%%");
+	printf("\n");
 	return (0);
 }
 
