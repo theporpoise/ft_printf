@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:11 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/13 10:08:27 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/14 09:15:49 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,56 @@
 
 int main()
 {
-	char *format = "%s:%s\n";
+	char *format = "love\nstuff\n";
 	int val;
 
+	val = ft_printf(format, "hello world\n");
+	//printf("val:%d\n", val);
 
-	val = ft_printf(format, "hello world\n", "42\n");
+	//val = printf(format, "hello world\n");
+	//printf("val:%d\n", val);
+
+	return (0);
+}
+
+
+/*
+	char *format = "love\n%sstuff\n";
+	int val;
+
+	val = ft_printf(format, "hello world\n");
 	printf("val:%d\n", val);
 
+	val = printf(format, "hello world\n");
+	printf("val:%d\n", val);
+
+*/
+
+
+
+
+
+//check the return value for printf b/c it is weird
+
+/*
+String, stuff in middle, number, newline"
+	char *format = "%s:%d\n";
+	int val;
+
+	val = ft_printf(format, "hello world\n", 42);
+	printf("val:%d\n", val);
+
+	val = printf(format, "hello world\n", 42);
+	printf("val:%d\n", val);
+
+
+*/
+
+
+
+/*
+wrap this in a function in a separate file, then I can have lots of printf
+testing examples to look at later.
 	printf("PRINT F TESTING %\n");
 	printf("\n0:");
 	printf("");
@@ -48,9 +91,5 @@ int main()
 	printf("\n6:");
 	printf("%%%%%%");
 	printf("\n");
-	return (0);
-}
 
-//check the return value for printf b/c it is weird
-//this project is test driven.
-
+*/

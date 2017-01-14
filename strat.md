@@ -21,6 +21,16 @@ a conversion specifier.
 ** optional precision
 ** optional length modifier
 
+// Parsing Strat
+-take in the string.
+-go until you see a %
+-handle the % case properly
+-once you find a %, go until you hit something that is not a "special char"
+or hit a specifier.  If you hit something thats unexpected have an error.
+// when you s: something that says "this flag is ignored" just think to yourself
+this is later on down in an if else statement!
+
+
 2. Handling interaction between flags
 * See interesting table.
 
@@ -71,6 +81,7 @@ Must declare a variable (object) of type va_list which is used by the macros va_
 -dif print functions for dif output,
 ex: putnbr for numbers, putstr for string, putmem for mem
 
+
 print it a piece at a time?  Or construct the whole string and then print?
 
 ## keep track of how many chars the thing printed out. . .
@@ -92,5 +103,9 @@ a conversion specifier.  In between there may be:
 
 # Printf Assumptions that may impact things (reading from man page):
 The functions vprintf(), vfprintf(), vsprintf(), vsnprintf() are equivalent to the functions printf(), fprintf(), sprintf(), snprintf(), respectively, except that they are called with a va_list instead of a variable number of arguments. These functions do not call the va_end macro. Because they invoke the va_arg macro, the value of ap is undefined after the call. S: stdarg(3).
+
+Print F Questions:
+
+Does printf have an escape character, like \??
 
 
