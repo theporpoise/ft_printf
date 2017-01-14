@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/14 09:16:55 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/14 09:57:25 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,54 @@
 //optional length modifier
 
 //determine what type it is. . . so you can passs to va_arg
+//fuck this jazz,  unbelieveable. what a stupid fucking moron function.
 
-//FIRST VERSION BY SUNDAY EVENING
-//WORKING VERSION FOR TESTING MONDAY
-//TESTING VERSION BY WEDNESDAY
-//SUBMIT THURSDAY
-//GRADE FRIDAY
+//printf - create a print up to a specifier funtion that also returns the len
+//it printed. . .
+
+int		conversion_specification_processor(const char **format)
+{
+	int count;
+	// count says how much to increment format
+	count = 1;
+
+	printf("conversion_specification_processor is happenning!\n");
+
+	*format += count;
+
+	return (count);
+}
 
 
 int	ft_printf(const char *format, ...)
 {
-	int num;
+	int len_value;
+	int tmp;
 	va_list param_list;
 
-	num = 0;
 	va_start(param_list, format);
 
+	len_value = 1;
+	tmp = 0;
 	while(*format != '\0')
 	{
-		ft_putchar(*format);
-		format++;
+		if (*format != '%')
+		{
+			ft_putchar(*format);
+			format++;
+			len_value++;
+		}
+		else
+		{
+			tmp = conversion_specification_processor(&format);
+			len_value += tmp;
+		}
+		format += tmp;
+		tmp = 0;
 	}
 
 
 	va_end(param_list);
-	num = printf("currently do not have counter set up\n");
-	return (num);
+	return (len_value);
 
 }
