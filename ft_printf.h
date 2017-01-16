@@ -1,28 +1,23 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/12 22:05:09 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/12 14:39:31 by mgould           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 # include <libft.h>
 
 int					ft_printf(const char *str, ...);
+char				*ft_start_strstr(const char *big, const char *little);
 
-typedef struct		s_list_1
+typedef struct		s_specifier
 {
-	void			*rest;
-	void			*start;
-	int				rm;
-	int				fd;
-	struct s_list_1	*next;
-}					t_list_1;
+	char			*flags;
+	int				field_width;
+	int				precision;
+	char			*len_modifier;
+}					t_specifier;
+
+/*
+** extern variables
+*/
+
+extern const char	*len_mod[];
 
 #endif
