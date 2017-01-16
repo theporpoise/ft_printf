@@ -30,6 +30,12 @@ or hit a specifier.  If you hit something thats unexpected have an error.
 // when you s: something that says "this flag is ignored" just think to yourself
 this is later on down in an if else statement!
 
+# va_arg beast
+yeah, so how do you know what type to pass to VA arg?  hahahahahahahha!
+hahahahahahahaha!
+so ned a function to do this shouty!  yepe yepypeypeypyepypeypeyp!
+
+
 
 2. Handling interaction between flags
 * See interesting table.

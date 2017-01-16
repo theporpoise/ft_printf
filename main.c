@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:11 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/14 09:31:46 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/14 19:48:36 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 int main()
 {
-	char *format = "love\n%s\nstuff\n";
+	char *format = "love\n%%%0s\nstuff\n";
 	int val;
 
 	val = ft_printf(format, "hello world\n");
