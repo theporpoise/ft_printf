@@ -6,13 +6,14 @@
 int					ft_printf(const char *str, ...);
 char				*ft_start_strstr(const char *big, const char *little);
 
-typedef struct		s_specifier
+typedef struct		s_box
 {
 	char			*flags;
 	int				field_width;
 	int				precision;
 	char			*len_modifier;
-}					t_specifier;
+	char			specifier;
+}					t_box;
 
 /*
 ** extern variables

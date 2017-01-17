@@ -3,7 +3,7 @@
 
 int main()
 {
-	char *format = "love\n%%%#2.2ll    ";
+	char *format = "love\n%%%#2.2lld\nworld\n";
 	int val;
 
 	val = ft_printf(format, 123);

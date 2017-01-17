@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/16 12:05:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/16 16:32:22 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,16 @@
 //printf - create a print up to a specifier funtion that also returns the len
 //it printed. . .
 
+//old code
 int		specification_pu(const char **format)
 {
-	int count;
 	char *flags = 		"-+ #0";
 	char *field_width =	"0123456789";
 	char *precision =	".";
 	char *len_modify =	"0123456789";
 	char *specifier = 	"sSpdDioOuUxXcC";
 
-
-	// count says how much to increment format
-	count = 1;
-
-	printf("specification_pu is happenning!\n");
-
-	*format += count;
-
-	return (count);
+	return (0);
 }
 
 int		matches_any_char(char *string, char char_to_match)
@@ -81,6 +73,8 @@ int		matches_any_array(const char **string, const char *str_to_match)
 	}
 	return (0);
 }
+
+
 
 void	move_past_specifier(const char **format)
 {
@@ -138,9 +132,11 @@ int	ft_printf(const char *format, ...)
 {
 	int 				len_value;
 	va_list 			param_list;
-	struct s_specifier	*box;
+	//extern t_box		*box;
 
 	va_start(param_list, format);
+	//if (!(box = (t_box*)malloc(sizeof(t_box))))
+	//	return (0);
 
 	len_value = 0;
 	while(*format != '\0')
@@ -161,7 +157,9 @@ int	ft_printf(const char *format, ...)
 		}
 	}
 
-
+	//build a functio to fully free box, or do it before here
+	//need to free box's elements, like *flags array
+	//free(box);
 	va_end(param_list);
 	return (len_value);
 
