@@ -8,10 +8,20 @@ char				*ft_start_strstr(const char *big, const char *little);
 
 typedef struct		s_box
 {
-	char			*flags;
+/*
+** flags
+*/
+	int				pound_flag;
+	int				zero_flag;
+	int 			minus_flag;
+	int				space_flag;
+	int				plus_flag;
+/*
+** field width and precision
+*/
 	int				field_width;
 	int				precision;
-	char			*len_modifier;
+	int				len_modifier;
 	char			specifier;
 }					t_box;
 

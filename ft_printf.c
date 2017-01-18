@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/16 16:32:22 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/18 13:30:27 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,10 @@ void	move_past_specifier(const char **format)
 	}
 	return ;
 }
+
+// not sure how to proceed with the read in.  I want to store teh result of the
+// read to a struct, but not sure how best to do it.  Also, I want to pass
+// this on to the result of va_whatever so I can grab the result and print it.
 
 int	ft_printf(const char *format, ...)
 {
