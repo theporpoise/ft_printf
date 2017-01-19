@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/19 13:08:40 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/19 13:28:12 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,6 @@
 
 //INT_MAX
 //%[flags][width][.precision][length]specifier
-
-//IN THIS ORDER
-//0 or more flags
-//optional min field width
-/*
- * field width is over ridden by thingy size. . .
- * negative sign is simply interpreted as a - flag.
- */
-
-//optional precision
-//optional length modifier
-//specifier
-
-//printf - create a print up to a specifier funtion that also returns the len
-//it printed. . .
 
 int		matches_any_char(const char *string, char char_to_match)
 {
@@ -126,7 +111,6 @@ void	length_modifier(const char **format, t_box *box)
 	{
 		*format += len;
 	}
-
 }
 
 void	move_past_specifier(const char **format, t_box *box)
@@ -160,12 +144,11 @@ t_box	*box_init(t_box *box)
 	new->minus_flag = -1;
 	new->space_flag = -1;
 	new->plus_flag = -1;
-
 	new->field_width = -1;
 	new->precision = -1;
 	new->len_modifier = -1;
 	new->specifier = 0;
-
+	new->len_value = 0;
 	return (new);
 }
 
@@ -200,20 +183,9 @@ int	ft_printf(const char *format, ...)
 		}
 	}
 
-	// Begin Debug Code
-	printf("val:%d\n", len_value);
-	printf("&&&&&&&&&&&&&\n");
-	printf("pound_flag:%d\n", box->pound_flag);
-	printf("zero_flag:%d\n", box->zero_flag);
-	printf("minus_flag:%d\n", box->minus_flag);
-	printf("space_flag:%d\n", box->space_flag);
-	printf("plus_flag:%d\n", box->plus_flag);
-	printf("field_width:%d\n", box->field_width);
-	printf("precision:%d\n", box->precision);
-	printf("len_modifier:%d\n", box->len_modifier);
-	printf("specifier:%c\n", box->specifier);
-	// End Debug Code
+	print_struct_data(box);
 
+	printf("ft_printf return value:%d\n", len_value);
 	free(box);
 	va_end(param_list);
 	return (len_value);

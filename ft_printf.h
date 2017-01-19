@@ -3,8 +3,7 @@
 # define FT_PRINTF_H
 # include <libft.h>
 
-int					ft_printf(const char *str, ...);
-char				*ft_start_strstr(const char *big, const char *little);
+
 
 typedef struct		s_box
 {
@@ -17,13 +16,17 @@ typedef struct		s_box
 	int				space_flag;
 	int				plus_flag;
 /*
-** single flags for last 4
+** field width and precision
 */
 	int				field_width;
 	int				precision;
 	int				len_modifier;
 	char			specifier;
+	int				len_value;
 }					t_box;
+
+int					ft_printf(const char *str, ...);
+char				*ft_start_strstr(const char *big, const char *little);
 
 /*
 ** extern variables
@@ -32,5 +35,9 @@ typedef struct		s_box
 extern const char	*len_mod[];
 extern const char	*g_specifier;
 extern const char	*g_flags;
+
+// debug function DELETE THIS LATER
+void	print_struct_data(t_box *box);
+//
 
 #endif
