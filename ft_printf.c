@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/18 16:31:40 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/19 13:08:40 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 //printf - create a print up to a specifier funtion that also returns the len
 //it printed. . .
 
-int		matches_any_char(char *string, char char_to_match)
+int		matches_any_char(const char *string, char char_to_match)
 {
 	while (*string)
 	{
@@ -46,16 +46,19 @@ int		matches_any_char(char *string, char char_to_match)
 	return (0);
 }
 
-int		matches_any_array(const char **string, const char *str_to_match)
+int		matches_any_array(const char **string, const char *str_to_match, t_box *box)
 {
+	int i;
+
+	i = 0;
 	while (*string)
 	{
-		//printf("1:%s\n", *string);
 		if (ft_start_strstr(str_to_match, *string))
 		{
-			//printf("%c\n%c\n", *str_to_match, **string);
+			box->len_modifier = i;
 			return ft_strlen(*string);
 		}
+		i++;
 		string += 1;
 	}
 	return (0);
@@ -63,9 +66,7 @@ int		matches_any_array(const char **string, const char *str_to_match)
 
 void	flags_match(const char **format, t_box *box)
 {
-	char	*flags = "-+ #0";
-
-	while (matches_any_char(flags, **format))
+	while (matches_any_char(g_flags, **format))
 	{
 		if (**format == '#')
 			box->pound_flag = 1;
@@ -121,10 +122,8 @@ void	length_modifier(const char **format, t_box *box)
 	int	len;
 
 	len = 0;
-	while ((len = matches_any_array(len_mod, *format)))
+	while ((len = matches_any_array(len_mod, *format, box)))
 	{
-		//printf("len is:%d\n", len);
-		//printf("len modifier found:%c\n", **format);
 		*format += len;
 	}
 
@@ -132,11 +131,6 @@ void	length_modifier(const char **format, t_box *box)
 
 void	move_past_specifier(const char **format, t_box *box)
 {
-	char	*flags = "-+ #0";
-	char 	*specifier = 	"sSpdDioOuUxXcC";
-	int		len;
-
-	len = 0;
 	*format += 1;
 	if (**format == '%')
 	{
@@ -148,15 +142,11 @@ void	move_past_specifier(const char **format, t_box *box)
 	field_width(format, box);
 	precision(format, box);
 	length_modifier(format, box);
-	//printf("before conversion_specifier:%s:\n", *format);
-	//conversion specifier
-	if ((matches_any_char(specifier, **format)))
+	if ((matches_any_char(g_specifier, **format)))
 	{
-		//printf("specifier found:%c\n", **format);
 		box->specifier = **format;
 		*format += 1;
 	}
-	return ;
 }
 
 t_box	*box_init(t_box *box)
@@ -178,6 +168,8 @@ t_box	*box_init(t_box *box)
 
 	return (new);
 }
+
+
 
 int	ft_printf(const char *format, ...)
 {

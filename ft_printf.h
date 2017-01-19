@@ -30,5 +30,7 @@ typedef struct		s_box
 */
 
 extern const char	*len_mod[];
+extern const char	*g_specifier;
+extern const char	*g_flags;
 
 #endif
