@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/18 13:30:27 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/18 16:31:40 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include <libft.h>
 #include <stdlib.h>
 #include <ft_printf.h>
+#include <limits.h>
 
+//INT_MAX
 //%[flags][width][.precision][length]specifier
 
 //IN THIS ORDER
@@ -30,23 +32,8 @@
 //optional length modifier
 //specifier
 
-//determine what type it is. . . so you can passs to va_arg
-//fuck this jazz,  unbelieveable. what a stupid fucking moron function.
-
 //printf - create a print up to a specifier funtion that also returns the len
 //it printed. . .
-
-//old code
-int		specification_pu(const char **format)
-{
-	char *flags = 		"-+ #0";
-	char *field_width =	"0123456789";
-	char *precision =	".";
-	char *len_modify =	"0123456789";
-	char *specifier = 	"sSpdDioOuUxXcC";
-
-	return (0);
-}
 
 int		matches_any_char(char *string, char char_to_match)
 {
@@ -74,9 +61,76 @@ int		matches_any_array(const char **string, const char *str_to_match)
 	return (0);
 }
 
+void	flags_match(const char **format, t_box *box)
+{
+	char	*flags = "-+ #0";
 
+	while (matches_any_char(flags, **format))
+	{
+		if (**format == '#')
+			box->pound_flag = 1;
+		else if (**format == '0')
+			box->zero_flag = 1;
+		else if (**format == '-')
+			box->minus_flag = 1;
+		else if (**format == ' ')
+			box->space_flag = 1;
+		else if (**format == '+')
+			box->plus_flag = 1;
+		*format += 1;
+	}
+}
 
-void	move_past_specifier(const char **format)
+void	field_width(const char **format, t_box *box)
+{
+	int value;
+
+	value = -1;
+	if (ft_isdigit(**format))
+		value = 0;
+	while (ft_isdigit(**format))
+	{
+		value *= 10;
+		value += (**format - '0');
+		*format += 1;
+	}
+	box->field_width = value;
+}
+
+void	precision(const char **format, t_box *box)
+{
+	int value;
+
+	value = -1;
+	if (**format == '.')
+	{
+		value = 0;
+		*format += 1;
+		while (ft_isdigit(**format))
+				{
+					value *= 10;
+					value += (**format - '0');
+					*format += 1;
+				}
+	}
+	box->precision = value;
+}
+
+void	length_modifier(const char **format, t_box *box)
+{
+	int	len;
+
+	len = 0;
+	while ((len = matches_any_array(len_mod, *format)))
+	{
+		//printf("len is:%d\n", len);
+		//printf("len modifier found:%c\n", **format);
+		*format += len;
+	}
+
+}
+
+void	move_past_specifier(const char **format, t_box *box)
 {
 	char	*flags = "-+ #0";
 	char 	*specifier = 	"sSpdDioOuUxXcC";
@@ -90,57 +144,50 @@ void	move_past_specifier(const char **format)
 		ft_putchar('%');
 		return ;
 	}
-	//flags
-	while (matches_any_char(flags, **format))
-	{
-		printf("flag found:%c\n", **format);
-		*format += 1;
-	}
-	//min field width
-	while (ft_isdigit(**format))
-	{
-		printf("field width found\n");
-		*format +=1;
-	}
-	//precision
-	if (**format == '.')
-	{
-		printf("precision found\n");
-		*format += 1;
-		while (ft_isdigit(**format))
-				{
-					*format += 1;
-				}
-	}
-	//length modifier
-	while ((len = matches_any_array(len_mod, *format)))
-	{
-		printf("len is:%d\n", len);
-		printf("len modifier found:%c\n", **format);
-		*format += len;
-	}
+	flags_match(format, box);
+	field_width(format, box);
+	precision(format, box);
+	length_modifier(format, box);
+	//printf("before conversion_specifier:%s:\n", *format);
 	//conversion specifier
 	if ((matches_any_char(specifier, **format)))
 	{
-		printf("specifier found:%c\n", **format);
+		//printf("specifier found:%c\n", **format);
+		box->specifier = **format;
 		*format += 1;
 	}
 	return ;
 }
 
-// not sure how to proceed with the read in.  I want to store teh result of the
-// read to a struct, but not sure how best to do it.  Also, I want to pass
-// this on to the result of va_whatever so I can grab the result and print it.
+t_box	*box_init(t_box *box)
+{
+	t_box	*new;
+
+	if (!(new = (t_box*)malloc(sizeof(t_box))))
+		return (NULL);
+	new->pound_flag = -1;
+	new->zero_flag = -1;
+	new->minus_flag = -1;
+	new->space_flag = -1;
+	new->plus_flag = -1;
+
+	new->field_width = -1;
+	new->precision = -1;
+	new->len_modifier = -1;
+	new->specifier = 0;
+
+	return (new);
+}
 
 int	ft_printf(const char *format, ...)
 {
 	int 				len_value;
 	va_list 			param_list;
-	//extern t_box		*box;
+	t_box				*box;
 
 	va_start(param_list, format);
-	//if (!(box = (t_box*)malloc(sizeof(t_box))))
-	//	return (0);
+	if (!(box = box_init(box)))
+		return (0);
 
 	len_value = 0;
 	while(*format != '\0')
@@ -153,7 +200,7 @@ int	ft_printf(const char *format, ...)
 		}
 		else
 		{
-			move_past_specifier(&format);
+			move_past_specifier(&format, box);
 			//get_that_type
 			//get_that_outpu
 			//print_that_output
@@ -161,9 +208,21 @@ int	ft_printf(const char *format, ...)
 		}
 	}
 
-	//build a functio to fully free box, or do it before here
-	//need to free box's elements, like *flags array
-	//free(box);
+	// Begin Debug Code
+	printf("val:%d\n", len_value);
+	printf("&&&&&&&&&&&&&\n");
+	printf("pound_flag:%d\n", box->pound_flag);
+	printf("zero_flag:%d\n", box->zero_flag);
+	printf("minus_flag:%d\n", box->minus_flag);
+	printf("space_flag:%d\n", box->space_flag);
+	printf("plus_flag:%d\n", box->plus_flag);
+	printf("field_width:%d\n", box->field_width);
+	printf("precision:%d\n", box->precision);
+	printf("len_modifier:%d\n", box->len_modifier);
+	printf("specifier:%c\n", box->specifier);
+	// End Debug Code
+
+	free(box);
 	va_end(param_list);
 	return (len_value);
 

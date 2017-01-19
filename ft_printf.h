@@ -9,7 +9,7 @@ char				*ft_start_strstr(const char *big, const char *little);
 typedef struct		s_box
 {
 /*
-** flags
+** flags - 5 total
 */
 	int				pound_flag;
 	int				zero_flag;
@@ -17,7 +17,7 @@ typedef struct		s_box
 	int				space_flag;
 	int				plus_flag;
 /*
-** field width and precision
+** single flags for last 4
 */
 	int				field_width;
 	int				precision;
