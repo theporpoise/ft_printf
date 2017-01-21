@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 09:17:35 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/21 13:44:49 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,18 @@ void	move_past_specifier(const char **format, t_box *box)
 	}
 }
 
+
+
 intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 {
 	intmax_t cast;
 
-	if (box->len_modifier == 0)
+	//for some reason when there is undefined behavior mine
+	//is di"erent than printf, but for now i'm moving on since
+	//that is undefined behavior"
+	if (box->len_modifier == -1)
+		cast = (int)storage;
+	else if (box->len_modifier == 0)
 		cast = (signed char)(storage);
 	else if (box->len_modifier == 1)
 		cast = (short)(storage);
@@ -64,7 +71,7 @@ intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 	return (cast);
 }
 
-char	*the_good_size(t_box *box, char *value)
+char	*field_width_handler(t_box *box, char *value)
 {
 	int i;
 	int j;
@@ -74,6 +81,9 @@ char	*the_good_size(t_box *box, char *value)
 	j = 0;
 	if ((i = ((box->field_width) - ft_strlen(value))) > 0)
 	{
+		//consider breaking this while loop into separate function
+		//so you can left and right align the output OR
+		//I can format it after this part . . . and handle flags separately.
 		giver = (char *)malloc(sizeof(char) * (1 + box->field_width));
 		while (j < i)
 		{
@@ -104,13 +114,16 @@ int	print_spec(t_box *box, va_list *param_list)
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
-		//value = ft_big_itoa(storage);
-		value = the_good_size(box, ft_big_itoa(storage));
+		//right here you have to deal with left or right alignment OR
+		value = field_width_handler(box, ft_big_itoa(storage));
+		//right here you can deal with alignment by updating the string.
+
 	}
 
 	//after all the formatting, simply print the string
 	ft_putstr(value);
 
+	//check signed and unsigned  uintmax_tc
 	return (ft_strlen(value));
 }
 
@@ -147,33 +160,14 @@ int	ft_printf(const char *format, ...)
 	}
 
 	//DEBUG CODE
-	//print_struct_data(box);
 	printf("val:%d\n", len_value);
+	debug_print_struct_data(box);
 	//END DEBUG CODE
+
 	free(box);
 	va_end(param_list);
 	return (len_value);
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
