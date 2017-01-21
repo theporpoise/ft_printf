@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/19 13:28:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/20 16:22:25 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,102 +16,10 @@
 #include <stdlib.h>
 #include <ft_printf.h>
 #include <limits.h>
+#include <stddef.h>
 
 //INT_MAX
 //%[flags][width][.precision][length]specifier
-
-int		matches_any_char(const char *string, char char_to_match)
-{
-	while (*string)
-	{
-		if (char_to_match == *string)
-			return (1);
-		string++;
-	}
-	return (0);
-}
-
-int		matches_any_array(const char **string, const char *str_to_match, t_box *box)
-{
-	int i;
-
-	i = 0;
-	while (*string)
-	{
-		if (ft_start_strstr(str_to_match, *string))
-		{
-			box->len_modifier = i;
-			return ft_strlen(*string);
-		}
-		i++;
-		string += 1;
-	}
-	return (0);
-}
-
-void	flags_match(const char **format, t_box *box)
-{
-	while (matches_any_char(g_flags, **format))
-	{
-		if (**format == '#')
-			box->pound_flag = 1;
-		else if (**format == '0')
-			box->zero_flag = 1;
-		else if (**format == '-')
-			box->minus_flag = 1;
-		else if (**format == ' ')
-			box->space_flag = 1;
-		else if (**format == '+')
-			box->plus_flag = 1;
-		*format += 1;
-	}
-}
-
-void	field_width(const char **format, t_box *box)
-{
-	int value;
-
-	value = -1;
-	if (ft_isdigit(**format))
-		value = 0;
-	while (ft_isdigit(**format))
-	{
-		value *= 10;
-		value += (**format - '0');
-		*format += 1;
-	}
-	box->field_width = value;
-}
-
-void	precision(const char **format, t_box *box)
-{
-	int value;
-
-	value = -1;
-	if (**format == '.')
-	{
-		value = 0;
-		*format += 1;
-		while (ft_isdigit(**format))
-				{
-					value *= 10;
-					value += (**format - '0');
-					*format += 1;
-				}
-	}
-	box->precision = value;
-}
-
-void	length_modifier(const char **format, t_box *box)
-{
-	int	len;
-
-	len = 0;
-	while ((len = matches_any_array(len_mod, *format, box)))
-	{
-		*format += len;
-	}
-}
 
 void	move_past_specifier(const char **format, t_box *box)
 {
@@ -133,25 +41,47 @@ void	move_past_specifier(const char **format, t_box *box)
 	}
 }
 
-t_box	*box_init(t_box *box)
+void	d_i_type_mod(t_box *box, intmax_t *storage)
 {
-	t_box	*new;
+	intmax_t cast;
 
-	if (!(new = (t_box*)malloc(sizeof(t_box))))
-		return (NULL);
-	new->pound_flag = -1;
-	new->zero_flag = -1;
-	new->minus_flag = -1;
-	new->space_flag = -1;
-	new->plus_flag = -1;
-	new->field_width = -1;
-	new->precision = -1;
-	new->len_modifier = -1;
-	new->specifier = 0;
-	new->len_value = 0;
-	return (new);
+	if (box->len_modifier == 0)
+		*storage = (signed char)(*storage);
+	else if (box->len_modifier == 1)
+		*storage = (short)(*storage);
+	else if (box->len_modifier == 2)
+		*storage = (long long)(*storage);
+	else if (box->len_modifier == 3)
+		*storage = (long)(*storage);
+	else if (box->len_modifier == 4)
+		*storage = (intmax_t)(*storage);
+	else if (box->len_modifier == 5)
+		*storage = (ptrdiff_t)(*storage);
+	else if (box->len_modifier == 6)
+		*storage = (size_t)(*storage);
 }
 
+void	print_spec(t_box *box, va_list *param_list)
+{
+	char c;
+	intmax_t storage;
+	char *value;
+
+	c = box->specifier;
+
+	//this is the is a number function.
+	if (c == 'd' || c == 'i')
+	{
+		storage = (va_arg(*param_list, intmax_t));
+		d_i_type_mod(box, &storage);
+		value = ft_itoa(storage);
+		ft_putstr(value);
+		//ft_putnbr(storage);
+	}
+
+
+		//storage = (long long)storage;
+}
 
 
 int	ft_printf(const char *format, ...)
@@ -170,22 +100,25 @@ int	ft_printf(const char *format, ...)
 		if (*format != '%')
 		{
 			ft_putchar(*format);
-			format++;
 			len_value++;
+			format++;
+		}
+		else if (*format == '%' && *(format + 1) == '%')
+		{
+			ft_putchar('%');
+			format += 2;
 		}
 		else
 		{
 			move_past_specifier(&format, box);
-			//get_that_type
-			//get_that_outpu
-			//print_that_output
-			//printf(get_that_output, get_that_type);
+			print_spec(box, &param_list);
 		}
 	}
 
+	//DEBUG CODE
 	print_struct_data(box);
-
 	printf("ft_printf return value:%d\n", len_value);
+	//END DEBUG CODE
 	free(box);
 	va_end(param_list);
 	return (len_value);

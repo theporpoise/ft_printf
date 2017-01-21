@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/12 11:00:36 by mgould            #+#    #+#              #
-#    Updated: 2017/01/19 13:24:26 by mgould           ###   ########.fr        #
+#    Updated: 2017/01/20 13:32:21 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME = test.out
 
 LIBA = libft/libft.a
 
-OBJS =  main.o ft_printf.o g_const_vars.o ft_start_strstr.o debug.o
+OBJS =  main.o ft_printf.o g_const_vars.o parse_sub_helpers.o debug.o \
+		parse_helpers.o
 
 CFLAGS = #-Wall -Wextra -Werror
 

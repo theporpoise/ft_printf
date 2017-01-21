@@ -3,14 +3,14 @@
 
 int main()
 {
-	char *format = "love\n%%%+- #010.10lld\nworld\n";
+	char *format = "hello\n%10.4lli\nworld\n";
 	int val;
 
-	val = ft_printf(format, 123);
+	val = ft_printf(format, 42);
 
 	printf("&&&&&&&&&&&&&&&&&&&&&\n");
 
-	val = printf(format, 123);
+	val = printf(format, 42);
 	printf("val:%d\n", val);
 
 	return (0);
