@@ -41,6 +41,7 @@ extern const char	*g_flags;
 
 // debug function DELETE THIS LATER
 void	print_struct_data(t_box *box);
+void	debug_d_i_ints();
 //
 
 #endif
