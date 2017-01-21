@@ -2,6 +2,7 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 # include <libft.h>
+# include <stdint.h>
 
 typedef struct		s_box
 {
@@ -27,6 +28,8 @@ void				flags_match(const char **format, t_box *box);
 void				field_width(const char **format, t_box *box);
 void				precision(const char **format, t_box *box);
 void				length_modifier(const char **format, t_box *box);
+void				ft_put_big_nbr(intmax_t n);
+char				*ft_big_itoa(intmax_t n);
 
 /*
 ** extern variables

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/20 16:22:25 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/21 08:40:52 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <ft_printf.h>
 #include <limits.h>
 #include <stddef.h>
+#include <stdint.h>
 
 //INT_MAX
 //%[flags][width][.precision][length]specifier
@@ -41,27 +42,57 @@ void	move_past_specifier(const char **format, t_box *box)
 	}
 }
 
-void	d_i_type_mod(t_box *box, intmax_t *storage)
+intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 {
 	intmax_t cast;
 
 	if (box->len_modifier == 0)
-		*storage = (signed char)(*storage);
+		cast = (signed char)(storage);
 	else if (box->len_modifier == 1)
-		*storage = (short)(*storage);
+		cast = (short)(storage);
 	else if (box->len_modifier == 2)
-		*storage = (long long)(*storage);
+		cast = (long long)(storage);
 	else if (box->len_modifier == 3)
-		*storage = (long)(*storage);
+		cast = (long)(storage);
 	else if (box->len_modifier == 4)
-		*storage = (intmax_t)(*storage);
+		cast = (intmax_t)(storage);
 	else if (box->len_modifier == 5)
-		*storage = (ptrdiff_t)(*storage);
+		cast = (ptrdiff_t)(storage);
 	else if (box->len_modifier == 6)
-		*storage = (size_t)(*storage);
+		cast = (size_t)(storage);
+
+	return (cast);
 }
 
-void	print_spec(t_box *box, va_list *param_list)
+char	*the_good_size(t_box *box, char *value)
+{
+	int i;
+	int j;
+	char *giver;
+
+	i = 0;
+	j = 0;
+	if ((i = ((box->field_width) - ft_strlen(value))) > 0)
+	{
+		giver = (char *)malloc(sizeof(char) * (1 + box->field_width));
+		while (j < i)
+		{
+			giver[j] = ' ';
+			j++;
+		}
+		while (*value)
+		{
+			giver[j] = *value;
+			j++;
+			value++;
+		}
+		giver[j] = '\0';
+		return (giver);
+	}
+	return (value);
+}
+
+int	print_spec(t_box *box, va_list *param_list)
 {
 	char c;
 	intmax_t storage;
@@ -72,15 +103,15 @@ void	print_spec(t_box *box, va_list *param_list)
 	//this is the is a number function.
 	if (c == 'd' || c == 'i')
 	{
-		storage = (va_arg(*param_list, intmax_t));
-		d_i_type_mod(box, &storage);
-		value = ft_itoa(storage);
-		ft_putstr(value);
-		//ft_putnbr(storage);
+		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
+		//value = ft_big_itoa(storage);
+		value = the_good_size(box, ft_big_itoa(storage));
 	}
 
+	//after all the formatting, simply print the string
+	ft_putstr(value);
 
-		//storage = (long long)storage;
+	return (ft_strlen(value));
 }
 
 
@@ -111,13 +142,13 @@ int	ft_printf(const char *format, ...)
 		else
 		{
 			move_past_specifier(&format, box);
-			print_spec(box, &param_list);
+			len_value += print_spec(box, &param_list);
 		}
 	}
 
 	//DEBUG CODE
-	print_struct_data(box);
-	printf("ft_printf return value:%d\n", len_value);
+	//print_struct_data(box);
+	printf("val:%d\n", len_value);
 	//END DEBUG CODE
 	free(box);
 	va_end(param_list);
