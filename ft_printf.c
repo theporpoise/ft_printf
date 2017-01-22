@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 18:15:53 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/22 12:01:12 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,20 @@ intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 
 char	*field_width_handler(t_box *box, char *value)
 {
-	int i;
-	int j;
-	char *giver;
+	int 	i;
+	int 	j;
+	char 	*giver;
+	int		min;
 
 	i = 0;
 	j = 0;
-	if ((i = ((box->field_width) - ft_strlen(value))) > 0)
+	min = ((box->precision > box->field_width) ? box->precision : box->field_width);
+	if ((i = (min - ft_strlen(value))) > 0)
 	{
 		//consider breaking this while loop into separate function
 		//so you can left and right align the output OR
 		//I can format it after this part . . . and handle flags separately.
-		giver = (char *)malloc(sizeof(char) * (1 + box->field_width));
+		giver = (char *)malloc(sizeof(char) * (1 + min));
 		while (j < i)
 		{
 			giver[j] = ' ';
@@ -106,39 +108,80 @@ char	*field_width_handler(t_box *box, char *value)
 	return (value);
 }
 
-char	*precision_handler(t_box *box, char *value)
+void	precision_handler(t_box *box, char *value)
 {
 	char	*copy;
-	int		len;
-	int		i;
+	int		num_digits;
+	int		j;
+	int		str_len;
 
-	i = ft_strlen(value);
-	len = (box->precision);
-	if (!(copy = (char *)malloc(sizeof(char) * (len + 1))))
-		return (NULL);
-	if (box->precision < ft_strlen(value))
-		return (value);
-	//ft_putstr("precision 1\n");
-	//ft_putnbr(len);
-	//ft_putstr("\n");
-	//ft_put_big_nbr(ft_strlen(value));
-	//ft_putstr("precision 1\n");
-	while (i < len)
+	j = 0;
+	num_digits = 0;
+	copy = NULL;
+	str_len = ft_strlen(value);
+	while (value[j])
 	{
-		//ft_putstr("in loop 1\n");
-		copy[i] = '0';
+		if (ft_isdigit(value[j]))
+			num_digits++;
+		j++;
+	}
+	while ((box->precision - num_digits) > 0)
+	{
+		value[str_len - num_digits - 1] = '0';
+		num_digits++;
+	}
+}
+
+void	left_align_number(char *value)
+{
+	int count;
+	int str_len;
+	int i;
+
+	i = 0;
+	count = 0;
+	str_len = ft_strlen(value);
+
+	while (value[count] == '0' || value[count] == ' ')
+		count++;
+	while (value[count])
+	{
+		value[i] = value[count];
+		count++;
 		i++;
 	}
-	//ft_putstr("precision 1\n");
-	while (*value)
+	while (value[i])
 	{
-		copy[i] = *value;
+		value[i] = ' ';
 		i++;
-		value++;
 	}
-	//ft_putstr("precision 1\n");
-	copy[i] = '\0';
-	return (copy);
+}
+
+void	zero_flag_handler(char *value)
+{
+	int i;
+
+	i = 0;
+	while (value[i] == ' ')
+	{
+		value[i] = '0';
+		i++;
+	}
+}
+
+char	*flag_handler(t_box *box, char *value)
+{
+	//ft_putstr("inside flag handler\n");
+	if (box->minus_flag > 0)
+	{
+		left_align_number(value);
+	}
+	else if (box->zero_flag)
+	{
+		zero_flag_handler(value);
+	}
+
+	return (value);
 }
 
 int	print_spec(t_box *box, va_list *param_list)
@@ -153,14 +196,9 @@ int	print_spec(t_box *box, va_list *param_list)
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
-		//ft_putstr("you re here9\n");
-		//right here you have to deal with left or right alignment OR
 		value = field_width_handler(box, ft_big_itoa(storage));
-		//ft_putstr("you are here9B\n");
-		//right here you can deal with alignment by updating the string.
-		//value = precision_handler(box, value);
-		//ft_putstr("you are here9C\n");
-
+		precision_handler(box, value);
+		value = flag_handler(box, value);
 	}
 
 	//after all the formatting, simply print the string
