@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 15:26:37 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/21 17:20:56 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,18 @@ void	move_past_specifier(const char **format, t_box *box)
 		return ;
 	}
 	flags_match(format, box);
+	//ft_putstr("you are here\n");
 	field_width(format, box);
+	//ft_putstr("you are here\n");
 	precision(format, box);
+	//ft_putstr("you are here\n");
 	length_modifier(format, box);
 	if ((matches_any_char(g_specifier, **format)))
 	{
 		box->specifier = **format;
 		*format += 1;
 	}
+	//ft_putstr("you are here\n");
 }
 
 
@@ -108,23 +112,44 @@ char	*precision_handler(t_box *box, char *value)
 	int		len;
 	int		i;
 
-	i = 0;
+	i = ft_strlen(value);
 	len = (box->precision);
 	if (!(copy = (char *)malloc(sizeof(char) * (len + 1))))
 		return (NULL);
 	if (box->precision < ft_strlen(value))
 		return (value);
-	while (ft_strlen(value) < (len - i))
+	ft_putstr("precision 1\n");
+	ft_putnbr(len);
+	ft_putstr("\n");
+	ft_put_big_nbr(ft_strlen(value));
+	ft_putstr("precision 1\n");
+	while (i < len)
 	{
+		//ft_putstr("in loop 1\n");
 		copy[i] = '0';
+		ft_putnbr(i);
+		ft_putstr("\n");
+		ft_putnbr(ft_strlen(value));
+		ft_putstr("\n");
+		ft_putnbr((ft_strlen(value) + i));
+		ft_putstr("on to length\n");
+		ft_putnbr(len);
+		ft_putstr("\n");
+		ft_putstr("\n");
+		ft_putnbr((ft_strlen(value) + i) < (len));
+
+		ft_putstr("\n");
+		ft_putstr("\n");
 		i++;
 	}
+	ft_putstr("precision 1\n");
 	while (*value)
 	{
 		copy[i] = *value;
 		i++;
 		value++;
 	}
+	ft_putstr("precision 1\n");
 	copy[i] = '\0';
 	return (copy);
 }
@@ -141,10 +166,13 @@ int	print_spec(t_box *box, va_list *param_list)
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
+		ft_putstr("you are here9\n");
 		//right here you have to deal with left or right alignment OR
 		value = field_width_handler(box, ft_big_itoa(storage));
+		ft_putstr("you are here9B\n");
 		//right here you can deal with alignment by updating the string.
 		value = precision_handler(box, value);
+		ft_putstr("you are here9C\n");
 
 	}
 
@@ -183,6 +211,7 @@ int	ft_printf(const char *format, ...)
 		else
 		{
 			move_past_specifier(&format, box);
+			//ft_putstr("you are here5\n");
 			len_value += print_spec(box, &param_list);
 		}
 	}
