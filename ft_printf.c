@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 13:44:49 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/21 15:26:37 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,33 @@ char	*field_width_handler(t_box *box, char *value)
 	return (value);
 }
 
+char	*precision_handler(t_box *box, char *value)
+{
+	char	*copy;
+	int		len;
+	int		i;
+
+	i = 0;
+	len = (box->precision);
+	if (!(copy = (char *)malloc(sizeof(char) * (len + 1))))
+		return (NULL);
+	if (box->precision < ft_strlen(value))
+		return (value);
+	while (ft_strlen(value) < (len - i))
+	{
+		copy[i] = '0';
+		i++;
+	}
+	while (*value)
+	{
+		copy[i] = *value;
+		i++;
+		value++;
+	}
+	copy[i] = '\0';
+	return (copy);
+}
+
 int	print_spec(t_box *box, va_list *param_list)
 {
 	char c;
@@ -117,6 +144,7 @@ int	print_spec(t_box *box, va_list *param_list)
 		//right here you have to deal with left or right alignment OR
 		value = field_width_handler(box, ft_big_itoa(storage));
 		//right here you can deal with alignment by updating the string.
+		value = precision_handler(box, value);
 
 	}
 

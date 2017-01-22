@@ -6,10 +6,13 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 13:29:48 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/20 13:29:52 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/21 14:58:01 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//DEBUG, RM LATER
+#include <stdio.h>
+//
 #include <stdarg.h>
 #include <libft.h>
 #include <stdlib.h>
@@ -78,6 +81,9 @@ void	precision(const char **format, t_box *box)
 	{
 		value = 0;
 		*format += 1;
+		//this is NOT how the man specifies it, but is how printf works.
+		if (**format == '-')
+			*format += 1;
 		while (ft_isdigit(**format))
 				{
 					value *= 10;

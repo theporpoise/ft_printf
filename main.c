@@ -4,13 +4,14 @@
 int main()
 {
 
-	char *format = "hello\none:%.d\ntwo:%.d\nworld\n";
+	char *format0 = "hello\none:%.10d\ntwo:%.-10d\nworld\n";
+	char *format1 = "hello\none:%.10d\ntwo:%.-10d\nworld\n";
 	int val;
 
 	val = 0;
-	val = ft_printf(format, 42, -1234567890123);
+	val = ft_printf(format0, 42, -1234567890123);
 	printf("&&&&&&&&&&&&&&&&&&&&&\n");
-	val = printf(format, 42, -1234567890123);
+	val = printf(format0, 42, -1234567890123);
 	printf("val:%d\n", val);
 
 	//convert to float for it to work
