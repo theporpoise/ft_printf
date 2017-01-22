@@ -18,8 +18,9 @@ int main()
 	//printf("\n%d\n", 42.42);
 
 	//DEBUG FUNCTIONS
-	debug_d_i_ints();
+	//debug_d_i_ints();
 	//debug_d_i_len_mod();
-	//debug_d_i_precision();
+
+	debug_d_i_precision();
 	return (0);
 }
