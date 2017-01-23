@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 11:31:34 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 12:07:22 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ int		print_spec(t_box *box, va_list *param_list)
 	i = 0;
 	c = box->specifier;
 	value = NULL;
-	//this is the is a number function.
+	//d and i do NOT care about the # flag.
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
@@ -239,13 +239,20 @@ int		print_spec(t_box *box, va_list *param_list)
 				value[i] = ' ';
 				i++;
 			}
-		if (box->space_flag > 0 && ft_isdigit(*value))
+		if (box->plus_flag > 0 && ft_isdigit(*value))
+			value = ft_prestr("+", value);
+		else if (box->plus_flag > 0)
+		{
+			i = 0;
+			while (value[i] == ' ')
+				i++;
+			if (!(value[i] == '-'))
+				value[i - 1] = '+';
+		}
+		else if (box->space_flag > 0 && ft_isdigit(*value))
 			value = ft_prestr(" ", value);
 	}
-
-	//after all the formatting, simply print the string
 	ft_putstr(value);
-
 	//check signed and unsigned  uintmax_tc
 	return (value == NULL ? 0 : ft_strlen(value));
 }
