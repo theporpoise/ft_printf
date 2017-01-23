@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/22 12:01:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/22 17:59:15 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ char	*flag_handler(t_box *box, char *value)
 	{
 		left_align_number(value);
 	}
-	else if (box->zero_flag)
+	else if ((box->zero_flag) > 0)
 	{
 		zero_flag_handler(value);
 	}
