@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 12:07:22 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 14:43:50 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,6 @@ char	*flag_handler(t_box *box, char *value)
 	{
 		zero_flag_handler(value);
 	}
-
 	return (value);
 }
 
@@ -288,11 +287,9 @@ int	ft_printf(const char *format, ...)
 			len_value += print_spec(box, &param_list);
 		}
 	}
-
 	//DEBUG CODE
 	//debug_print_struct_data(box);
 	//END DEBUG CODE
-
 	free(box);
 	va_end(param_list);
 	return (len_value);
