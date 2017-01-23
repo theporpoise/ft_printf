@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/22 17:59:15 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 11:31:34 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,6 @@ char	*field_width_handler(t_box *box, char *value)
 	min = ((box->precision > box->field_width) ? box->precision : box->field_width);
 	if ((i = (min - ft_strlen(value))) > 0)
 	{
-		//consider breaking this while loop into separate function
-		//so you can left and right align the output OR
-		//I can format it after this part . . . and handle flags separately.
 		giver = (char *)malloc(sizeof(char) * (1 + min));
 		while (j < i)
 		{
@@ -108,27 +105,61 @@ char	*field_width_handler(t_box *box, char *value)
 	return (value);
 }
 
-void	precision_handler(t_box *box, char *value)
+char	*ft_prestr(char *prepend, char *original)
 {
-	char	*copy;
+	char *new;
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	//ft_putstr("inside pre-string");
+	new = ft_strnew(ft_strlen(original) + ft_strlen(prepend));
+	while (prepend[i])
+	{
+		new[i] = prepend[i];
+		i++;
+	}
+	while (original[j])
+	{
+		new[i] = original[j];
+		j++;
+		i++;
+	}
+	return (new);
+}
+
+void	precision_handler(t_box *box, char **value)
+{
 	int		num_digits;
 	int		j;
 	int		str_len;
+	int		minus_flag;
 
+	minus_flag = 0;
 	j = 0;
 	num_digits = 0;
-	copy = NULL;
-	str_len = ft_strlen(value);
-	while (value[j])
+	str_len = ft_strlen(*value);
+	while ((*value)[j])
 	{
-		if (ft_isdigit(value[j]))
+		if (ft_isdigit((*value)[j]))
 			num_digits++;
 		j++;
 	}
 	while ((box->precision - num_digits) > 0)
 	{
-		value[str_len - num_digits - 1] = '0';
+		if ((*value)[str_len - num_digits - 1] == '-')
+			minus_flag = 1;
+		(*value)[str_len - num_digits - 1] = '0';
 		num_digits++;
+	}
+	if (**value == '0' && minus_flag > 0)
+		*value = ft_prestr("-", *value);
+	else if (minus_flag)
+	{
+		while (!(ft_isdigit(**value)))
+			*value += 1;
+		**value = '-';
 	}
 }
 
@@ -184,28 +215,39 @@ char	*flag_handler(t_box *box, char *value)
 	return (value);
 }
 
-int	print_spec(t_box *box, va_list *param_list)
+int		print_spec(t_box *box, va_list *param_list)
 {
 	char c;
 	intmax_t storage;
 	char *value;
+	int i;
 
+	i = 0;
 	c = box->specifier;
-
+	value = NULL;
 	//this is the is a number function.
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
 		value = field_width_handler(box, ft_big_itoa(storage));
-		precision_handler(box, value);
+		precision_handler(box, &value);
 		value = flag_handler(box, value);
+		// if precision is zero, value is zero, print empy string (nothing);
+		if (storage == 0 && box->precision == 0)
+			while (value[i])
+			{
+				value[i] = ' ';
+				i++;
+			}
+		if (box->space_flag > 0 && ft_isdigit(*value))
+			value = ft_prestr(" ", value);
 	}
 
 	//after all the formatting, simply print the string
 	ft_putstr(value);
 
 	//check signed and unsigned  uintmax_tc
-	return (ft_strlen(value));
+	return (value == NULL ? 0 : ft_strlen(value));
 }
 
 
@@ -236,13 +278,11 @@ int	ft_printf(const char *format, ...)
 		else
 		{
 			move_past_specifier(&format, box);
-			//ft_putstr("you are here5\n");
 			len_value += print_spec(box, &param_list);
 		}
 	}
 
 	//DEBUG CODE
-	//printf("val:%d\n", len_value);
 	//debug_print_struct_data(box);
 	//END DEBUG CODE
 

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 13:29:48 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 16:50:03 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 06:49:01 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ void	precision(const char **format, t_box *box)
 		*format += 1;
 		//this is NOT how the man specifies it, but is how printf works.
 		if (**format == '-')
+		{
+			box->minus_flag = 1;
 			*format += 1;
+		}
 		while (ft_isdigit(**format))
 				{
 					value *= 10;

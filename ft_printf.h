@@ -44,6 +44,7 @@ void	debug_print_struct_data(t_box *box);
 void	debug_d_i_ints();
 void	debug_d_i_len_mod();
 void	debug_d_i_precision();
+void	debug_d_i_space();
 //
 
 #endif
