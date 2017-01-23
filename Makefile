@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/12 11:00:36 by mgould            #+#    #+#              #
-#    Updated: 2017/01/23 15:29:53 by mgould           ###   ########.fr        #
+#    Updated: 2017/01/23 15:35:00 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBA)
-	ar rc $(NAME) $(OBJS)
+	ar rc $(NAME) $(OBJS) $(LIBA)
 
 $(OBJS): ft_printf.h
 
