@@ -18,7 +18,7 @@ typedef struct		s_box
 	char			specifier;
 }					t_box;
 
-t_box				*box_init(t_box *box);
+t_box				*box_init();
 int					ft_printf(const char *str, ...);
 char				*ft_start_strstr(const char *big, const char *little);
 int					matches_any_char(const char *string, char char_to_match);

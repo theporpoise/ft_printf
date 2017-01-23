@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 13:29:48 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 06:49:01 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 15:21:01 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <ft_printf.h>
 #include <limits.h>
 
-t_box	*box_init(t_box *box)
+t_box	*box_init()
 {
 	t_box	*new;
 

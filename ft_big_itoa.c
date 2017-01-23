@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 07:38:02 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 08:01:01 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 15:21:55 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	ft_make_nbr(char *blank_string, int len, intmax_t n)
 	}
 }
 
+/*
 static char *ft_make_zero(char *blank_string)
 {
 	if ((blank_string = (char *)malloc(sizeof(char) * (2))))
@@ -46,6 +47,7 @@ static char *ft_make_zero(char *blank_string)
 	else
 		return (NULL);
 }
+*/
 
 char	*ft_big_itoa(intmax_t n)
 {

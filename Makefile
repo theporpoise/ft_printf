@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/12 11:00:36 by mgould            #+#    #+#              #
-#    Updated: 2017/01/23 15:16:27 by mgould           ###   ########.fr        #
+#    Updated: 2017/01/23 15:17:42 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIBA = libft/libft.a
 OBJS =  ft_printf.o g_const_vars.o parse_sub_helpers.o \
 		parse_helpers.o ft_put_big_nbr.o ft_big_itoa.o
 
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

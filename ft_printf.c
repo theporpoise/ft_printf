@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 14:43:50 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/23 15:20:36 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,7 @@ intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 {
 	intmax_t cast;
 
-	//for some reason when there is undefined behavior mine
-	//is di"erent than printf, but for now i'm moving on since
-	//that is undefined behavior"
+	cast = 0;
 	if (box->len_modifier == -1)
 		cast = (int)storage;
 	else if (box->len_modifier == 0)
@@ -264,7 +262,8 @@ int	ft_printf(const char *format, ...)
 	t_box				*box;
 
 	va_start(param_list, format);
-	if (!(box = box_init(box)))
+	box = NULL;
+	if (!(box = box_init()))
 		return (0);
 
 	len_value = 0;
