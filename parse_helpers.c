@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 13:29:48 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 15:21:01 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/24 16:44:37 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include <stdio.h>
 //
 #include <stdarg.h>
-#include <libft.h>
+//#include <libft.h>
+#include "libft/libft.h"
 #include <stdlib.h>
 #include <ft_printf.h>
 #include <limits.h>

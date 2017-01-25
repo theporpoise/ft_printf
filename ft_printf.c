@@ -6,13 +6,14 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 15:20:36 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/24 16:42:05 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdarg.h> // va_list, func va_start, va_arg, va_end
-#include <libft.h>
+//#include <libft.h>
+#include "libft/libft.h"
 #include <stdlib.h>
 #include <ft_printf.h>
 #include <limits.h>

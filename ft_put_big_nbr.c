@@ -6,11 +6,12 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 07:03:44 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/21 07:10:41 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/24 16:43:19 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+//#include <libft.h>
+#include "libft/libft.h"
 #include <stddef.h>
 #include <limits.h>
 #include <stdint.h>

@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/12 11:00:36 by mgould            #+#    #+#              #
-#    Updated: 2017/01/24 11:47:27 by mgould           ###   ########.fr        #
+#    Updated: 2017/01/24 12:12:00 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBA)
 	ar rc $(NAME) $(OBJS) $(LIBA)
 
-$(OBJS): ft_printf.h libft/libft.h
+$(OBJS): ft_printf.h
 
 $(LIBA):
 	cd libft/ && make

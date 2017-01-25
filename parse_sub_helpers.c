@@ -6,11 +6,12 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 13:23:06 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/20 13:24:35 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/24 16:44:53 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+//#include <libft.h>
+#include "libft/libft.h"
 #include <ft_printf.h>
 
 char	*ft_start_strstr(const char *big, const char *little)
