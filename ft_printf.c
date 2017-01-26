@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/25 15:36:47 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/25 18:52:03 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,17 +231,22 @@ int		print_spec(t_box *box, va_list *param_list)
 	return (value == NULL ? 0 : ft_strlen(value));
 }
 
-void	move_past_specifier(const char **format, t_box *box)
+int	move_past_specifier(const char **format, t_box *box, int *len_value)
 {
-	*format += 1;
-	/*
-	if (**format == '%')
+ 	if (**format != '%')
 	{
+		ft_putchar(**format);
+		*len_value += 1;
 		*format += 1;
-		ft_putchar('%');
-		return ;
+		return (0);
 	}
-	*/
+	else if (**format == '%' && *((*format + 1)) == '%')
+	{
+		ft_putchar('%');
+		*format += 2;
+		return (0);
+	}
+	*format += 1;
 	flags_match(format, box);
 	field_width(format, box);
 	precision(format, box);
@@ -249,8 +254,10 @@ void	move_past_specifier(const char **format, t_box *box)
 	if ((matches_any_char(g_specifier, **format)))
 	{
 		box->specifier = **format;
+		//possible error if specifier is len 2, doesn't skip 2
 		*format += 1;
 	}
+	return (1);
 }
 
 int	ft_printf(const char *format, ...)
@@ -266,22 +273,8 @@ int	ft_printf(const char *format, ...)
 	len_value = 0;
 	while(*format != '\0')
 	{
-		if (*format != '%')
-		{
-			ft_putchar(*format);
-			len_value++;
-			format++;
-		}
-		else if (*format == '%' && *(format + 1) == '%')
-		{
-			ft_putchar('%');
-			format += 2;
-		}
-		else
-		{
-			move_past_specifier(&format, box);
+		if (move_past_specifier(&format, box, &len_value))
 			len_value += print_spec(box, &param_list);
-		}
 	}
 	//DEBUG CODE
 	//debug_print_struct_data(box);
