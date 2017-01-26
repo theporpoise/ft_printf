@@ -6,14 +6,16 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 07:38:02 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/23 15:21:55 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/24 17:25:43 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdint.h>
-#include <printf.h>
+//#include "printf.h"
+#include "ft_printf.h"
 #include "libft/libft.h"
+//#include <libft.h>
 
 static void	ft_make_nbr(char *blank_string, int len, intmax_t n)
 {
@@ -34,20 +36,6 @@ static void	ft_make_nbr(char *blank_string, int len, intmax_t n)
 		n = n / 10;
 	}
 }
-
-/*
-static char *ft_make_zero(char *blank_string)
-{
-	if ((blank_string = (char *)malloc(sizeof(char) * (2))))
-	{
-		blank_string[0] = '0';
-		blank_string[1] = '\0';
-		return (blank_string);
-	}
-	else
-		return (NULL);
-}
-*/
 
 char	*ft_big_itoa(intmax_t n)
 {

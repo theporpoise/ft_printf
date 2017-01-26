@@ -6,46 +6,24 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/24 16:42:05 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/25 15:36:47 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdarg.h> // va_list, func va_start, va_arg, va_end
+#include <stdarg.h>
 //#include <libft.h>
 #include "libft/libft.h"
 #include <stdlib.h>
-#include <ft_printf.h>
+//#include <ft_printf.h>
+#include "ft_printf.h"
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
 
 //INT_MAX
 //%[flags][width][.precision][length]specifier
-
-void	move_past_specifier(const char **format, t_box *box)
-{
-	*format += 1;
-	if (**format == '%')
-	{
-		*format += 1;
-		ft_putchar('%');
-		return ;
-	}
-	flags_match(format, box);
-	//ft_putstr("you are here\n");
-	field_width(format, box);
-	//ft_putstr("you are here\n");
-	precision(format, box);
-	//ft_putstr("you are here\n");
-	length_modifier(format, box);
-	if ((matches_any_char(g_specifier, **format)))
-	{
-		box->specifier = **format;
-		*format += 1;
-	}
-	//ft_putstr("you are here\n");
-}
+//create a return string, and then strcat to it! do it do it!
 
 
 
@@ -86,19 +64,14 @@ char	*field_width_handler(t_box *box, char *value)
 	min = ((box->precision > box->field_width) ? box->precision : box->field_width);
 	if ((i = (min - ft_strlen(value))) > 0)
 	{
-		giver = (char *)malloc(sizeof(char) * (1 + min));
+		giver = (char *)ft_memalloc(1 + min);
 		while (j < i)
 		{
 			giver[j] = ' ';
 			j++;
 		}
-		while (*value)
-		{
-			giver[j] = *value;
-			j++;
-			value++;
-		}
 		giver[j] = '\0';
+		ft_strcat(giver, value);
 		return (giver);
 	}
 	return (value);
@@ -112,7 +85,6 @@ char	*ft_prestr(char *prepend, char *original)
 
 	i = 0;
 	j = 0;
-	//ft_putstr("inside pre-string");
 	new = ft_strnew(ft_strlen(original) + ft_strlen(prepend));
 	while (prepend[i])
 	{
@@ -128,23 +100,31 @@ char	*ft_prestr(char *prepend, char *original)
 	return (new);
 }
 
+int	digit_counter(char *str)
+{
+	int i;
+	int num_digits;
+
+	i = 0;
+	num_digits = 0;
+	while (str[i])
+	{
+		if (ft_isdigit(str[i]))
+			num_digits++;
+		i++;
+	}
+	return (num_digits);
+}
+
 void	precision_handler(t_box *box, char **value)
 {
 	int		num_digits;
-	int		j;
 	int		str_len;
 	int		minus_flag;
 
 	minus_flag = 0;
-	j = 0;
-	num_digits = 0;
+	num_digits = digit_counter(*value);
 	str_len = ft_strlen(*value);
-	while ((*value)[j])
-	{
-		if (ft_isdigit((*value)[j]))
-			num_digits++;
-		j++;
-	}
 	while ((box->precision - num_digits) > 0)
 	{
 		if ((*value)[str_len - num_digits - 1] == '-')
@@ -199,17 +179,30 @@ void	zero_flag_handler(char *value)
 	}
 }
 
-char	*flag_handler(t_box *box, char *value)
+char	*flag_handler(t_box *box, char *value, intmax_t storage)
 {
-	//ft_putstr("inside flag handler\n");
+	int i;
+
+	i = -1;
 	if (box->minus_flag > 0)
-	{
 		left_align_number(value);
-	}
 	else if ((box->zero_flag) > 0)
-	{
 		zero_flag_handler(value);
+	if (storage == 0 && box->precision == 0)
+		while (value[++i])
+			value[i] = ' ';
+	if (box->plus_flag > 0 && ft_isdigit(*value))
+		value = ft_prestr("+", value);
+	else if (box->plus_flag > 0)
+	{
+		i = 0;
+		while (value[i] == ' ')
+			i++;
+		if (!(value[i] == '-'))
+			value[i - 1] = '+';
 	}
+	else if (box->space_flag > 0 && ft_isdigit(*value))
+		value = ft_prestr(" ", value);
 	return (value);
 }
 
@@ -227,34 +220,38 @@ int		print_spec(t_box *box, va_list *param_list)
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
+		//add exception len modifier here.
+		//break into separate function
 		value = field_width_handler(box, ft_big_itoa(storage));
 		precision_handler(box, &value);
-		value = flag_handler(box, value);
-		// if precision is zero, value is zero, print empy string (nothing);
-		if (storage == 0 && box->precision == 0)
-			while (value[i])
-			{
-				value[i] = ' ';
-				i++;
-			}
-		if (box->plus_flag > 0 && ft_isdigit(*value))
-			value = ft_prestr("+", value);
-		else if (box->plus_flag > 0)
-		{
-			i = 0;
-			while (value[i] == ' ')
-				i++;
-			if (!(value[i] == '-'))
-				value[i - 1] = '+';
-		}
-		else if (box->space_flag > 0 && ft_isdigit(*value))
-			value = ft_prestr(" ", value);
+		value = flag_handler(box, value, storage);
 	}
 	ft_putstr(value);
 	//check signed and unsigned  uintmax_tc
 	return (value == NULL ? 0 : ft_strlen(value));
 }
 
+void	move_past_specifier(const char **format, t_box *box)
+{
+	*format += 1;
+	/*
+	if (**format == '%')
+	{
+		*format += 1;
+		ft_putchar('%');
+		return ;
+	}
+	*/
+	flags_match(format, box);
+	field_width(format, box);
+	precision(format, box);
+	length_modifier(format, box);
+	if ((matches_any_char(g_specifier, **format)))
+	{
+		box->specifier = **format;
+		*format += 1;
+	}
+}
 
 int	ft_printf(const char *format, ...)
 {
@@ -263,7 +260,6 @@ int	ft_printf(const char *format, ...)
 	t_box				*box;
 
 	va_start(param_list, format);
-	box = NULL;
 	if (!(box = box_init()))
 		return (0);
 

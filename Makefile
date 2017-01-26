@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/12 11:00:36 by mgould            #+#    #+#              #
-#    Updated: 2017/01/24 12:12:00 by mgould           ###   ########.fr        #
+#    Updated: 2017/01/24 18:59:00 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBA)
-	ar rc $(NAME) $(OBJS) $(LIBA)
+$(NAME): $(LIBA) $(OBJS)
+	ar r $(NAME) $(OBJS) $(LIBA)
 
 $(OBJS): ft_printf.h
 
@@ -39,6 +39,7 @@ fclean: clean
 re: fclean all
 
 %.o: %.c
-	gcc $(CFLAGS) -c -I . -I libft -o $@ $<
+	gcc $(CFLAGS) -c -o $@ $<
+#	gcc $(CFLAGS) -c -I . libft/libft.h -o $@ $<
 
 .PHONY: clean re fclean
