@@ -6,10 +6,11 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/26 12:00:19 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/27 08:08:20 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// REMOVE STDIO AFTER DEBUG
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -17,11 +18,6 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
-
-//%[flags][width][.precision][length]specifier
-//create a return string, and then strcat to it! do it do it!
-
-
 
 intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 {

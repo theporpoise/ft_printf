@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pf_g_const_vars.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 08:08:29 by mgould            #+#    #+#             */
+/*   Updated: 2017/01/27 08:22:59 by mgould           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-const char	*len_mod[] = {
+const char	*g_len_mod[] = {
 	"hh",
 	"h",
 	"ll",
@@ -13,25 +25,3 @@ const char	*len_mod[] = {
 const char	*g_specifier = "sSpdDioOuUxXcC";
 
 const char	*g_flags = "-+ #0";
-
-/*
- *Number Specifiers
- * D
- * i
- * o
- * O
- * u
- * U
- * s
- * X
- *
- *Character Specifiers
- * s
- * S
- * c
- * C
- *
- * Pointer Specifier
- * p
- *
-*/

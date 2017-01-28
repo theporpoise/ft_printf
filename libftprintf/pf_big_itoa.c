@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 07:38:02 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/26 12:04:08 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/27 08:19:30 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	ft_make_nbr(char *blank_string, int len, intmax_t n)
 	}
 }
 
-char	*pf_big_itoa(intmax_t n)
+char		*pf_big_itoa(intmax_t n)
 {
 	int			len;
 	intmax_t	copy;

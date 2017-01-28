@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 11:38:24 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/26 12:03:35 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/27 08:18:40 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,11 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-
 typedef struct		s_box
 {
 	int				pound_flag;
 	int				zero_flag;
-	int 			minus_flag;
+	int				minus_flag;
 	int				space_flag;
 	int				plus_flag;
 	int				field_width;
@@ -41,8 +40,8 @@ t_box				*box_init();
 int					ft_printf(const char *str, ...);
 char				*ft_start_strstr(const char *big, const char *little);
 int					matches_any_char(const char *string, char char_to_match);
-int					matches_any_array(const char **string, \
-					const char *str_to_match, t_box *box);
+int					matches_any_array(const char **str, \
+					const char *to_match, t_box *box);
 void				flags_match(const char **format, t_box *box);
 void				field_width(const char **format, t_box *box);
 void				precision(const char **format, t_box *box);
@@ -54,20 +53,19 @@ char				*pf_big_itoa(intmax_t n);
 ** extern variables
 */
 
-extern const char	*len_mod[];
+extern const char	*g_len_mod[];
 extern const char	*g_specifier;
 extern const char	*g_flags;
 
 // debug function DELETE THIS LATER
-void	debug_print_struct_data(t_box *box);
-void	debug_d_i_ints();
-void	debug_d_i_len_mod();
-void	debug_d_i_precision();
-void	debug_d_i_space();
-void	debug_d_i_plus();
-void	debug_d_i_pound();
-//
-
+void				debug_print_struct_data(t_box *box);
+void				debug_d_i_ints();
+void				debug_d_i_len_mod();
+void				debug_d_i_precision();
+void				debug_d_i_space();
+void				debug_d_i_plus();
+void				debug_d_i_pound();
+// debug functions delete this late and remove functions
 
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));

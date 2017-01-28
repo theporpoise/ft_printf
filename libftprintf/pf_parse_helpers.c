@@ -6,18 +6,16 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 13:29:48 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/26 11:37:42 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/27 08:04:57 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//DEBUG, RM LATER
-#include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include "libft.h"
 #include <limits.h>
 
-t_box	*box_init()
+t_box	*box_init(void)
 {
 	t_box	*new;
 
@@ -79,18 +77,17 @@ void	precision(const char **format, t_box *box)
 	{
 		value = 0;
 		*format += 1;
-		//this is NOT how the man specifies it, but is how printf works.
 		if (**format == '-')
 		{
 			box->minus_flag = 1;
 			*format += 1;
 		}
 		while (ft_isdigit(**format))
-				{
-					value *= 10;
-					value += (**format - '0');
-					*format += 1;
-				}
+		{
+			value *= 10;
+			value += (**format - '0');
+			*format += 1;
+		}
 	}
 	box->precision = value;
 }
@@ -100,9 +97,8 @@ void	length_modifier(const char **format, t_box *box)
 	int	len;
 
 	len = 0;
-	while ((len = matches_any_array(len_mod, *format, box)))
+	while ((len = matches_any_array(g_len_mod, *format, box)))
 	{
 		*format += len;
 	}
 }
-
