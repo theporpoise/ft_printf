@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/27 08:08:20 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/28 08:00:29 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,32 @@ char	*flag_handler(t_box *box, char *value, intmax_t storage)
 	return (value);
 }
 
+intmax_t	ouxX_type_mod(t_box *box, intmax_t storage)
+{
+	intmax_t cast;
+
+	cast = 0;
+	if (box->len_modifier == -1)
+		cast = (unsigned int)storage;
+	else if (box->len_modifier == 0)
+		cast = (unsigned char)(storage);
+	else if (box->len_modifier == 1)
+		cast = (unsigned short)(storage);
+	else if (box->len_modifier == 2)
+		cast = (unsigned long long)(storage);
+	else if (box->len_modifier == 3)
+		cast = (unsigned long)(storage);
+	else if (box->len_modifier == 4)
+		cast = (uintmax_t)(storage);
+	else if (box->len_modifier == 5)
+		cast = (ptrdiff_t)(storage);
+	else if (box->len_modifier == 6)
+		cast = (size_t)(storage);
+
+	return (cast);
+}
+
+
 int		print_spec(t_box *box, va_list *param_list)
 {
 	char c;
@@ -208,23 +234,30 @@ int		print_spec(t_box *box, va_list *param_list)
 	i = 0;
 	c = box->specifier;
 	value = NULL;
-	//d and i do NOT care about the # flag.
 	if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
-		//add exception len modifier here.
-		//break into separate function
-		value = field_width_handler(box, pf_big_itoa(storage));
+		value = field_width_handler(box, pf_big_itoa_base(storage, 10));
+		precision_handler(box, &value);
+		value = flag_handler(box, value, storage);
+	}
+	else if (c == 'o')
+	{
+		storage = ouxX_type_mod(box, (va_arg(*param_list, intmax_t)));
+		value = field_width_handler(box, pf_big_itoa_base(storage, 8));
+		//i believe my handlers look for is_digit, so will have error with
+		//base > 10
 		precision_handler(box, &value);
 		value = flag_handler(box, value, storage);
 	}
 	ft_putstr(value);
-	//check signed and unsigned  uintmax_tc
 	return (value == NULL ? 0 : ft_strlen(value));
 }
 
 int	move_past_specifier(const char **format, t_box *box, int *len_value)
 {
+	//may fix parse read by removing if else and adding
+	//while *format += 1 run all functions
  	if (**format != '%')
 	{
 		ft_putchar(**format);
@@ -235,6 +268,7 @@ int	move_past_specifier(const char **format, t_box *box, int *len_value)
 	else if (**format == '%' && *((*format + 1)) == '%')
 	{
 		ft_putchar('%');
+		*len_value += 1;
 		*format += 2;
 		return (0);
 	}

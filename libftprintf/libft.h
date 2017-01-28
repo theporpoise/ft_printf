@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 11:38:24 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/27 08:18:40 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/28 07:30:57 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void				precision(const char **format, t_box *box);
 void				length_modifier(const char **format, t_box *box);
 void				pf_put_big_nbr(intmax_t n);
 char				*pf_big_itoa(intmax_t n);
+char				*pf_big_itoa_base(intmax_t n, int base);
 
 /*
 ** extern variables

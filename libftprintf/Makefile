@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/28 11:37:28 by mgould            #+#    #+#              #
-#    Updated: 2017/01/26 11:57:50 by mgould           ###   ########.fr        #
+#    Updated: 2017/01/28 07:20:55 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,8 @@ SRC	= ft_atoi.c ft_putchar.c ft_strlen.c \
 		ft_is_prime.c ft_sqrt.c ft_iterative_power.c \
 		ft_recursive_factorial.c \
 		ft_printf.c pf_g_const_vars.c pf_parse_sub_helpers.c \
-		pf_parse_helpers.c pf_put_big_nbr.c pf_big_itoa.c
+		pf_parse_helpers.c pf_put_big_nbr.c pf_big_itoa.c \
+		pf_big_itoa_base.c
 
 O = $(SRC:.c=.o)
 
