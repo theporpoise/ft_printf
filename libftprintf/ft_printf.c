@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/28 08:00:29 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/28 15:35:37 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,31 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
+
+
+char	*ft_strstick(char *prepend, char *original, int index)
+{
+	char *new;
+	int i;
+	int j;
+
+	i = 0;
+	j = index;
+	new = ft_strnew(ft_strlen(original + index) + ft_strlen(prepend));
+	while (prepend[i])
+	{
+		new[i] = prepend[i];
+		i++;
+	}
+	while (original[j])
+	{
+		new[i] = original[j];
+		j++;
+		i++;
+	}
+	free(original);
+	return (new);
+}
 
 intmax_t	d_i_type_mod(t_box *box, intmax_t storage)
 {
@@ -69,31 +94,11 @@ char	*field_width_handler(t_box *box, char *value)
 	return (value);
 }
 
-char	*ft_prestr(char *prepend, char *original)
-{
-	char *new;
-	int i;
-	int j;
 
-	i = 0;
-	j = 0;
-	new = ft_strnew(ft_strlen(original) + ft_strlen(prepend));
-	while (prepend[i])
-	{
-		new[i] = prepend[i];
-		i++;
-	}
-	while (original[j])
-	{
-		new[i] = original[j];
-		j++;
-		i++;
-	}
-	return (new);
-}
 
 int	digit_counter(char *str)
 {
+	//may need to add ability to count alphanumeric for hexadecimal
 	int i;
 	int num_digits;
 
@@ -125,7 +130,7 @@ void	precision_handler(t_box *box, char **value)
 		num_digits++;
 	}
 	if (**value == '0' && minus_flag > 0)
-		*value = ft_prestr("-", *value);
+		*value = ft_strstick("-", *value, 0);
 	else if (minus_flag)
 	{
 		while (!(ft_isdigit(**value)))
@@ -184,7 +189,7 @@ char	*flag_handler(t_box *box, char *value, intmax_t storage)
 		while (value[++i])
 			value[i] = ' ';
 	if (box->plus_flag > 0 && ft_isdigit(*value))
-		value = ft_prestr("+", value);
+		value = ft_strstick("+", value, 0);
 	else if (box->plus_flag > 0)
 	{
 		i = 0;
@@ -194,7 +199,7 @@ char	*flag_handler(t_box *box, char *value, intmax_t storage)
 			value[i - 1] = '+';
 	}
 	else if (box->space_flag > 0 && ft_isdigit(*value))
-		value = ft_prestr(" ", value);
+		value = ft_strstick(" ", value, 0);
 	return (value);
 }
 
@@ -223,6 +228,38 @@ intmax_t	ouxX_type_mod(t_box *box, intmax_t storage)
 	return (cast);
 }
 
+void	str_toupper(char *value)
+{
+	while (*value)
+	{
+		*value = ft_toupper(*value);
+		value++;
+	}
+}
+
+
+char	*oxX_pound_flag_handler(t_box *box, char *value)
+{
+	char *new;
+	int i;
+
+	i = 0;
+	new = NULL;
+	if (*value != '0' && box->pound_flag == 1)
+	{
+		while (value[i] == ' ')
+			i++;
+		new = ft_strstick("0x", value, i);
+	}
+	else if (*value == '0' && *(value + 1) == '0' && box->pound_flag == 1)
+	{
+		*(value + 1) = 'x';
+		new = value;
+	}
+
+
+	return (new != NULL ? new : value);
+}
 
 int		print_spec(t_box *box, va_list *param_list)
 {
@@ -245,10 +282,22 @@ int		print_spec(t_box *box, va_list *param_list)
 	{
 		storage = ouxX_type_mod(box, (va_arg(*param_list, intmax_t)));
 		value = field_width_handler(box, pf_big_itoa_base(storage, 8));
-		//i believe my handlers look for is_digit, so will have error with
-		//base > 10
 		precision_handler(box, &value);
 		value = flag_handler(box, value, storage);
+	}
+	else if (c == 'x' || c == 'X')
+	{
+		storage = ouxX_type_mod(box, (va_arg(*param_list, intmax_t)));
+		value = field_width_handler(box, pf_big_itoa_base(storage, 16));
+		precision_handler(box, &value);
+		value = flag_handler(box, value, storage);
+		value = oxX_pound_flag_handler(box, value);
+		value = field_width_handler(box, value);
+		// may need to call precision handler twicer here, refactor later.
+		if (c == 'X')
+			str_toupper(value);
+		//plus flag handler not working as expected.
+
 	}
 	ft_putstr(value);
 	return (value == NULL ? 0 : ft_strlen(value));
@@ -257,7 +306,7 @@ int		print_spec(t_box *box, va_list *param_list)
 int	move_past_specifier(const char **format, t_box *box, int *len_value)
 {
 	//may fix parse read by removing if else and adding
-	//while *format += 1 run all functions
+	//while *format += 1 run all functions and adding % to specifier as stop
  	if (**format != '%')
 	{
 		ft_putchar(**format);
@@ -280,7 +329,6 @@ int	move_past_specifier(const char **format, t_box *box, int *len_value)
 	if ((matches_any_char(g_specifier, **format)))
 	{
 		box->specifier = **format;
-		//possible error if specifier is len 2, doesn't skip 2
 		*format += 1;
 	}
 	return (1);
