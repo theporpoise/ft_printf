@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:08:29 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/27 08:22:59 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/30 15:06:55 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ const char	*g_len_mod[] = {
 	"z"
 };
 
-const char	*g_specifier = "sSpdDioOuUxXcC";
+const char	*g_specifier = "sSpdDioOuUxXcC%";
 
 const char	*g_flags = "-+ #0";

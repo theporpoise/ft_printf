@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 07:05:19 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/28 09:32:19 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/30 09:19:44 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ static void	ft_make_nbr(char *blank_string, int len, intmax_t n, int base)
 	// ffffffff00000000
 	//
 	i = 0;
+	/*
 	if (n == -4294967296)
 	{
 		n = n / base;
 	}
+	*/
 	if (n < 0)
 	{
 		blank_string[i] = '-';

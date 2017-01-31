@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/28 15:35:37 by mgould           ###   ########.fr       */
+/*   Updated: 2017/01/31 12:52:09 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ char	*field_width_handler(t_box *box, char *value)
 	char 	*giver;
 	int		min;
 
-	i = 0;
+	i = ((value == NULL) ? 0 : ft_strlen(value));
 	j = 0;
 	min = ((box->precision > box->field_width) ? box->precision : box->field_width);
-	if ((i = (min - ft_strlen(value))) > 0)
+	if ((i = (min - i)) > 0)
 	{
 		giver = (char *)ft_memalloc(1 + min);
 		while (j < i)
@@ -88,7 +88,9 @@ char	*field_width_handler(t_box *box, char *value)
 			j++;
 		}
 		giver[j] = '\0';
-		ft_strcat(giver, value);
+		if (value)
+			ft_strcat(giver, value);
+		free(value);
 		return (giver);
 	}
 	return (value);
@@ -119,6 +121,8 @@ void	precision_handler(t_box *box, char **value)
 	int		str_len;
 	int		minus_flag;
 
+	if (*value == NULL)
+		return ;
 	minus_flag = 0;
 	num_digits = digit_counter(*value);
 	str_len = ft_strlen(*value);
@@ -150,6 +154,30 @@ void	left_align_number(char *value)
 	str_len = ft_strlen(value);
 
 	while (value[count] == '0' || value[count] == ' ')
+		count++;
+	while (value[count])
+	{
+		value[i] = value[count];
+		count++;
+		i++;
+	}
+	while (value[i])
+	{
+		value[i] = ' ';
+		i++;
+	}
+}
+
+void	left_align_octal(char *value)
+{
+	int count;
+	int str_len;
+	int i;
+
+	i = 0;
+	count = 0;
+	str_len = ft_strlen(value);
+	while (value[count] == ' ')
 		count++;
 	while (value[count])
 	{
@@ -203,9 +231,9 @@ char	*flag_handler(t_box *box, char *value, intmax_t storage)
 	return (value);
 }
 
-intmax_t	ouxX_type_mod(t_box *box, intmax_t storage)
+intmax_t	ouxX_type_mod(t_box *box, uintmax_t storage)
 {
-	intmax_t cast;
+	uintmax_t cast;
 
 	cast = 0;
 	if (box->len_modifier == -1)
@@ -238,25 +266,30 @@ void	str_toupper(char *value)
 }
 
 
-char	*oxX_pound_flag_handler(t_box *box, char *value)
+char	*oxX_flag_handler(t_box *box, char *value)
 {
 	char *new;
 	int i;
 
 	i = 0;
-	new = NULL;
-	if (*value != '0' && box->pound_flag == 1)
+	new = value;
+	//
+	if (box->minus_flag > 0 && box->pound_flag < 0)
+		left_align_number(new);
+	else if (box->minus_flag > 0)
+		left_align_octal(new);
+	else if ((box->zero_flag) > 0)
+		zero_flag_handler(new);
+	if (box->pound_flag > 0)
 	{
-		while (value[i] == ' ')
-			i++;
-		new = ft_strstick("0x", value, i);
+		if (new[1] != 'x' && new[0] == '0')
+		{
+			while(new[i] != 'x')
+				i++;
+			new[i] = '0';
+			new[1] = 'x';
+		}
 	}
-	else if (*value == '0' && *(value + 1) == '0' && box->pound_flag == 1)
-	{
-		*(value + 1) = 'x';
-		new = value;
-	}
-
 
 	return (new != NULL ? new : value);
 }
@@ -265,13 +298,27 @@ int		print_spec(t_box *box, va_list *param_list)
 {
 	char c;
 	intmax_t storage;
+	uintmax_t ustorage;
 	char *value;
 	int i;
 
 	i = 0;
 	c = box->specifier;
 	value = NULL;
-	if (c == 'd' || c == 'i')
+	if (box->specifier == '%')
+	{
+		value = field_width_handler(box, value);
+		precision_handler(box, &value);
+		if (value == NULL)
+		{
+			value = ft_strnew(1);
+			value[0] = '%';
+		}
+		else
+			value[ft_strlen(value) - 1] = '%';
+		value = flag_handler(box, value, 1);
+	}
+	else if (c == 'd' || c == 'i')
 	{
 		storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
 		value = field_width_handler(box, pf_big_itoa_base(storage, 10));
@@ -280,26 +327,54 @@ int		print_spec(t_box *box, va_list *param_list)
 	}
 	else if (c == 'o')
 	{
-		storage = ouxX_type_mod(box, (va_arg(*param_list, intmax_t)));
-		value = field_width_handler(box, pf_big_itoa_base(storage, 8));
+		ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
+		value = field_width_handler(box, pf_ubig_itoa_base(ustorage, 8));
 		precision_handler(box, &value);
-		value = flag_handler(box, value, storage);
+		value = flag_handler(box, value, ustorage);
 	}
 	else if (c == 'x' || c == 'X')
 	{
-		storage = ouxX_type_mod(box, (va_arg(*param_list, intmax_t)));
-		value = field_width_handler(box, pf_big_itoa_base(storage, 16));
-		precision_handler(box, &value);
-		value = flag_handler(box, value, storage);
-		value = oxX_pound_flag_handler(box, value);
+		ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
+		if (ustorage != 0)
+			value = pf_ubig_itoa_base(ustorage, 16);
+		else if (ustorage == 0 && box->precision == 0 && box->field_width < 1)
+		{
+			return (0);
+		}
+		else if (ustorage == 0 && box->precision == -1)
+		{
+			value = ft_getz(value);
+			ft_putstr(value);
+			return (ft_strlen(value));
+		}
+		else
+			value = ft_strnew(0);
+
+		if (box->pound_flag > 0 && ustorage != 0)
+			value = ft_strstick("0x", value, 0);
 		value = field_width_handler(box, value);
-		// may need to call precision handler twicer here, refactor later.
+
+
+		precision_handler(box, &value);
+
+
+		value = oxX_flag_handler(box, value);
+		/*
+		ft_putchar('3');
+		ft_putstr(value);
+		ft_putchar('3');
+		*/
 		if (c == 'X')
 			str_toupper(value);
 		//plus flag handler not working as expected.
 
 	}
 	ft_putstr(value);
+	//
+	//printf("\n");
+	//debug_print_struct_data(box);
+	//printf("\n");
+	//
 	return (value == NULL ? 0 : ft_strlen(value));
 }
 
@@ -307,25 +382,21 @@ int	move_past_specifier(const char **format, t_box *box, int *len_value)
 {
 	//may fix parse read by removing if else and adding
 	//while *format += 1 run all functions and adding % to specifier as stop
- 	if (**format != '%')
+
+	if (**format != '%')
 	{
 		ft_putchar(**format);
 		*len_value += 1;
 		*format += 1;
 		return (0);
 	}
-	else if (**format == '%' && *((*format + 1)) == '%')
-	{
-		ft_putchar('%');
-		*len_value += 1;
-		*format += 2;
-		return (0);
-	}
+
 	*format += 1;
 	flags_match(format, box);
 	field_width(format, box);
 	precision(format, box);
 	length_modifier(format, box);
+
 	if ((matches_any_char(g_specifier, **format)))
 	{
 		box->specifier = **format;
