@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/01 20:42:40 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/02 13:20:45 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -565,8 +565,13 @@ char	*u_printer(t_box *box, va_list *param_list, char *value)
 
 void	specifier_update(t_box *box)
 {
-	if (box->specifier == 'D' || box->specifier == 'O' || box->specifier == 'U')
+	if (box->specifier == 'D' || box->specifier == 'O' || box->specifier == 'U' \
+			|| box->specifier == 'C')
+	{
 		box->len_modifier = 3;
+		box->specifier = ft_tolower(box->specifier);
+	}
+
 }
 
 char	*d_i_precision_handler(t_box *box, char **value, intmax_t storage)
