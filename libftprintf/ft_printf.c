@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/02 13:20:45 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/02 13:44:39 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stddef.h>
+#include <wchar.h>
 
 
 char	*ft_strstick(char *prepend, char *original, int index)
@@ -474,7 +476,8 @@ char	*char_field_width_handler(t_box *box, char *value)
 char	*c_printer(t_box *box, va_list *param_list, char *value, int *print_len)
 {
 	value = ft_strnew(1);
-	value[0] = va_arg(*param_list, int);
+	//ft_putstr("you are in c_printer");
+	value[0] = (char)(wint_t)va_arg(*param_list, wint_t);
 	if (value[0] == '\0')
 		*print_len += 1;
 	value = char_field_width_handler(box, value);
@@ -570,6 +573,8 @@ void	specifier_update(t_box *box)
 	{
 		box->len_modifier = 3;
 		box->specifier = ft_tolower(box->specifier);
+		//ft_putstr("you got here");
+		//ft_putchar(box->specifier);
 	}
 
 }
@@ -767,9 +772,10 @@ int		print_spec(t_box *box, va_list *param_list)
 	int		print_len;
 
 	print_len = 0;
-	c = box->specifier;
 	value = NULL;
 	specifier_update(box);
+	c = box->specifier;
+	//ft_putstr("out of specifier update");
 	if (box->specifier == '%')
 		value = percent_printer(value, box);
 	else if (c == 'd' || c == 'i')
