@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/31 16:03:29 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/01 20:42:40 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,33 +295,7 @@ char	*oxX_flag_handler(t_box *box, char *value)
 }
 
 
-void	str_precision_handler(t_box *box, char **value)
-{
-	int		num_digits;
-	int		str_len;
-	int		minus_flag;
 
-	if (*value == NULL)
-		return ;
-	minus_flag = 0;
-	num_digits = digit_counter(*value);
-	str_len = ft_strlen(*value);
-	while ((box->precision - num_digits) > 0)
-	{
-		if ((*value)[str_len - num_digits - 1] == '-')
-			minus_flag = 1;
-		(*value)[str_len - num_digits - 1] = '0';
-		num_digits++;
-	}
-	if (**value == '0' && minus_flag > 0)
-		*value = ft_strstick("-", *value, 0);
-	else if (minus_flag)
-	{
-		while (!(ft_isdigit(**value)))
-			*value += 1;
-		**value = '-';
-	}
-}
 
 char	*percent_printer(char *value, t_box *box)
 {
@@ -340,29 +314,7 @@ char	*percent_printer(char *value, t_box *box)
 	return (value);
 }
 
-char	*d_i_printer(char *value, t_box *box, va_list *param_list)
-{
-	intmax_t	storage;
 
-	storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
-	value = field_width_handler(box, pf_big_itoa_base(storage, 10));
-	precision_handler(box, &value);
-	value = flag_handler(box, value, storage);
-
-	return (value);
-}
-
-char	*o_printer(char *value, t_box *box, va_list *param_list)
-{
-	uintmax_t	ustorage;
-
-	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
-	value = field_width_handler(box, pf_ubig_itoa_base(ustorage, 8));
-	precision_handler(box, &value);
-	value = flag_handler(box, value, ustorage);
-
-	return (value);
-}
 
 char	*x_printer(char *value, t_box *box, va_list *param_list)
 {
@@ -391,68 +343,449 @@ char	*x_printer(char *value, t_box *box, va_list *param_list)
 	return (value);
 }
 
-
-
-int		print_spec(t_box *box, va_list *param_list)
+char	*pf_strnewchar(size_t size, char any)
 {
-	char c;
-	char *value;
+	size_t	i;
+	char	*str;
+
+	i = 0;
+	str = (char *)malloc(size + 1);
+	if (!str)
+		return (0);
+	while (i < size)
+	{
+		str[i] = any;
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+char	*str_precision_handler(t_box *box, char *value)
+{
+	int		str_len;
+	char	*ret;
+
+	if (value == NULL || box->precision < 0)
+	{
+		return value;
+	}
+	str_len = ft_strlen(value);
+	ret = ft_strdup(value);
+	if (str_len > box->precision)
+		ret[box->precision] = '\0';
+
+	return (ret);
+}
+
+char	*str_field_width_handler(t_box *box, char *value)
+{
+	int 	i;
+	int 	j;
+	char 	*giver;
+	int		min;
+
+	i = ((value == NULL) ? 0 : ft_strlen(value));
+	j = 0;
+	min = box->field_width;
+
+	if ((i = (min - i)) > 0)
+	{
+		giver = (char *)ft_memalloc(1 + min);
+		while (j < i)
+		{
+			giver[j] = ' ';
+			j++;
+		}
+		giver[j] = '\0';
+		ft_strcat(giver, value);
+		return (giver);
+	}
+	return (value);
+}
+
+void	left_align_str(char *value)
+{
+	int count;
+	int str_len;
 	int i;
 
 	i = 0;
-	c = box->specifier;
-	value = NULL;
-	if (box->specifier == '%')
+	count = 0;
+	str_len = ft_strlen(value);
+
+	while (value[count] == ' ')
+		count++;
+	while (value[count])
 	{
-		value = percent_printer(value, box);
+		value[i] = value[count];
+		count++;
+		i++;
 	}
-	else if (c == 'd' || c == 'i')
+	while (value[i])
 	{
-		value = d_i_printer(value, box, param_list);
+		value[i] = ' ';
+		i++;
 	}
-	else if (c == 'o')
+}
+
+char	*str_printer(t_box *box, va_list *param_list, char *value)
+{
+
+	value = va_arg(*param_list, char *);
+	value = str_precision_handler(box, value);
+	value = str_field_width_handler(box, value);
+	if (box->minus_flag > 0)
+		left_align_str(value);
+	if (value == NULL)
+		ft_putstr("(null)");
+
+	return (value);
+}
+
+char	*char_field_width_handler(t_box *box, char *value)
+{
+	int 	i;
+	int 	j;
+	char 	*giver;
+	int		min;
+
+	i = ((value == NULL) ? 0 : ft_strlen(value));
+	if (i == 0)
+		i++;
+	j = 0;
+	min = box->field_width;
+
+	if ((i = (min - i)) > 0)
 	{
-		value = o_printer(value, box, param_list);
-	}
-	else if (c == 'x' || c == 'X')
-	{
-		value = x_printer(value, box, param_list);
-		/*
-		ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
-		if (ustorage != 0)
-			value = pf_ubig_itoa_base(ustorage, 16);
-		else if (ustorage == 0 && box->precision == 0 && box->field_width < 1)
-			return (0);
-		else if (ustorage == 0 && box->precision == -1)
+		giver = (char *)ft_memalloc(1 + min);
+		while (j < i)
 		{
-			value = ft_getz(value);
-			ft_putstr(value);
-			return (ft_strlen(value));
+			giver[j] = ' ';
+			j++;
+		}
+		giver[j] = '\0';
+		ft_strcat(giver, value);
+		return (giver);
+	}
+	return (value);
+}
+
+char	*c_printer(t_box *box, va_list *param_list, char *value, int *print_len)
+{
+	value = ft_strnew(1);
+	value[0] = va_arg(*param_list, int);
+	if (value[0] == '\0')
+		*print_len += 1;
+	value = char_field_width_handler(box, value);
+	if (box->minus_flag > 0)
+		left_align_str(value);
+
+	return (value);
+}
+
+char	*o_precision_handler(t_box *box, char **value)
+{
+	int		str_len;
+	char	*new;
+	int		i;
+	int		j;
+
+	j = 0;
+	i = 0;
+	str_len = 0;
+	if (*value == NULL)
+		return (*value);
+	else if (box->precision > (str_len = ft_strlen(*value)))
+	{
+		new = ft_strnew(box->precision - str_len);
+		ft_memset((void *)new, '0', (box->precision - str_len));
+		new = ft_strjoin(new, *value);
+	}
+	else
+		return (*value);
+	return (new);
+}
+
+char	*o_pound_handler(char *value, t_box *box)
+{
+	int i;
+
+	i = 0;
+	if (box->pound_flag > 0 && value[i] == ' ')
+	{
+		while (value[i] == ' ')
+			i++;
+		value[i - 1] = '0';
+		return (value);
+	}
+	else if (box->pound_flag > 0 && value[i] != ' ')
+		return (ft_strjoin("0", value));
+
+	return (value);
+}
+
+char	*o_printer(char *value, t_box *box, va_list *param_list)
+{
+	uintmax_t	ustorage;
+
+	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
+	if (ustorage == 0 && box->precision == 0)
+		value = ft_strnew(0);
+	else if (ustorage == 0)
+		value = ft_getz(value);
+	else
+		value = pf_ubig_itoa_base(ustorage, 8);
+	value = o_precision_handler(box, &value);
+	value = str_field_width_handler(box, value);
+	value = o_pound_handler(value, box);
+	if (box->minus_flag > 0)
+		left_align_octal(value);
+	if (box->zero_flag > 0)
+		zero_flag_handler(value);
+	return (value);
+}
+
+
+char	*u_printer(t_box *box, va_list *param_list, char *value)
+{
+	uintmax_t	ustorage;
+
+	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
+	value = pf_ubig_itoa_base(ustorage, 10);
+	value = o_precision_handler(box, &value);
+	value = str_field_width_handler(box, value);
+	if (box->minus_flag > 0)
+		left_align_octal(value);
+	if (box->zero_flag > 0)
+		zero_flag_handler(value);
+
+	return (value);
+}
+
+void	specifier_update(t_box *box)
+{
+	if (box->specifier == 'D' || box->specifier == 'O' || box->specifier == 'U')
+		box->len_modifier = 3;
+}
+
+char	*d_i_precision_handler(t_box *box, char **value, intmax_t storage)
+{
+	int		num_digits;
+	int		str_len;
+	int		minus_flag;
+	char	*new;
+
+	new = NULL;
+	if (*value == NULL)
+		return *value;
+	minus_flag = 0;
+	num_digits = digit_counter(*value);
+	str_len = ft_strlen(*value);
+	if (box->precision == 0 && storage == 0)
+	{
+		new = ft_strnew(0);
+		return (new);
+	}
+	if (box->precision > num_digits)
+	{
+		new = ft_strnew(box->precision - num_digits);
+		ft_memset(new, '0', (box->precision - num_digits));
+		new = ft_strjoin(new, *value);
+/*
+		ft_putstr("you are here\n");
+		ft_putstr(new);
+		ft_putstr("you are here\n");
+*/
+		return (new);
+	}
+
+	return (*value);
+}
+
+char	*d_i_flag_handler(t_box *box, char *value, intmax_t storage)
+{
+	int i;
+
+	i = -1;
+	if (box->minus_flag > 0)
+		left_align_number(value);
+	else if ((box->zero_flag) > 0)
+		zero_flag_handler(value);
+	if (storage == 0 && box->precision == 0)
+		while (value[++i])
+			value[i] = ' ';
+	if (box->plus_flag > 0 && ft_isdigit(*value))
+		value = ft_strstick("+", value, 0);
+	else if (box->plus_flag > 0)
+	{
+		i = 0;
+		while (value[i] == ' ')
+			i++;
+		if (!(value[i] == '-'))
+			value = ft_strstick("+", value, i);
+	}
+	else if (box->space_flag > 0 && ft_isdigit(*value))
+		value = ft_strstick(" ", value, 0);
+	return (value);
+}
+
+//type, itoa, precision, zero (ignored precision), space, plus, minus, width
+
+int		digit_count(char *value)
+{
+	int count;
+
+	count = 0;
+	while(*value)
+	{
+		if (ft_isdigit(*value))
+			count++;
+		value++;
+	}
+	return (count);
+}
+
+char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
+{
+	int i;
+
+	i = 0;
+	if (box->space_flag > 0 && storage != 0)
+	{
+		if (*value == '0' && digit_count(value) > box->precision)
+			*value = ' ';
+		if (*value != ' ' && *value != '-')
+		{
+			value = ft_strjoin(" ", value);
+		}
+	}
+	if (box->plus_flag > 0 && storage >= 0)
+	{
+		if ((*value == '0') && storage == 0)
+			value = ft_strjoin("+", value);
+		else if ((*value == '0' && digit_count(value) > box->precision))
+			*value = '+';
+		else if (*value == ' ')
+		{
+			while(value[i] == ' ')
+				i++;
+			value[i - 1] = '+';
 		}
 		else
-			value = ft_strnew(0);
-
-		if (box->pound_flag > 0 && ustorage != 0)
-			value = ft_strstick("0x", value, 0);
-		value = field_width_handler(box, value);
-		precision_handler(box, &value);
-		value = oxX_flag_handler(box, value);
-		if (c == 'X')
-			str_toupper(value);
-		*/
+			value = ft_strjoin("+", value);
 	}
-	else if (c == 's')
+	return (value);
+}
+
+char *d_i_negative_handler(char *value, intmax_t storage)
+{
+	int i;
+
+	i = 0;
+	if (storage < 0 && *value != '-')
 	{
-		value = va_arg(*param_list, char *);
-		//precision handler, get right # chars
-		//field width handler, get right size
-		//left align handler
+		while(value[i])
+		{
+			if (value[i] == '-')
+				value[i] = '0';
+			i++;
+		}
+		i = 0;
+		while(value[i] == ' ')
+			i++;
+		if (value[i] == '0' || value[i] == '-')
+			value[i] = '-';
+		else
+			value[i - 1] = '-';
 	}
+	return (value);
+}
 
+void	d_i_zero_flag_handler(t_box *box, char *value)
+{
+	int i;
+
+	if (box->precision > -1)
+		return ;
+	i = 0;
+	while (value[i] == ' ')
+	{
+		value[i] = '0';
+		i++;
+	}
+}
+
+char	*d_i_printer(char *value, t_box *box, va_list *param_list)
+{
+	intmax_t	storage;
+
+	storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
+	value = pf_big_itoa_base(storage, 10);
+	value = d_i_precision_handler(box, &value, storage);
+	value = str_field_width_handler(box, value);
+	if (box->minus_flag > 0)
+		left_align_octal(value);
+	else if (box->zero_flag > 0)
+		d_i_zero_flag_handler(box, value);
+	value = d_i_negative_handler(value, storage);
+	value = d_i_space_plus_handler(box, value, storage);
+	if (value[box->field_width] == ' ')
+		value[box->field_width] = '\0';
+
+	// space first, put space in front of number
+	// zero, if precision, doesn't work
+	//zero or space put in a plus if plus, if minus, not zero
+	//value = str_field_width_handler(box, value);
+	//value = d_i_flag_handler(box, value, storage);
+	/*
+	if (box->minus_flag > 0)
+		left_align_number(value);
+	else if (box->zero_flag > 0)
+		zero_flag_handler(value);
+	*/
+	//pound handler
+	//alignment
+	//zero fill
+	//d_i_precision_handler(box, &value);
+	//value = flag_handler(box, value, storage);
+
+	return (value);
+}
+
+//zero case, precision, width, pound handler, alignment, zero fill
+
+int		print_spec(t_box *box, va_list *param_list)
+{
+	char	c;
+	char	*value;
+	int		print_len;
+
+	print_len = 0;
+	c = box->specifier;
+	value = NULL;
+	specifier_update(box);
+	if (box->specifier == '%')
+		value = percent_printer(value, box);
+	else if (c == 'd' || c == 'i')
+		value = d_i_printer(value, box, param_list);
+	else if (c == 'o')
+		value = o_printer(value, box, param_list);
+	else if (c == 'x' || c == 'X')
+		value = x_printer(value, box, param_list);
+	else if (c == 's')
+		value = str_printer(box, param_list, value);
+	else if (c == 'c')
+		value = c_printer(box, param_list, value, &print_len);
+	else if (c == 'u' || c == 'U')
+		value = u_printer(box, param_list, value);
 
 	ft_putstr(value);
-	return (value == NULL ? 0 : ft_strlen(value));
+	print_len += ft_strlen(value);
+	return (value == NULL ? 0 : print_len);
 }
+
+// wctmb, wcstmbs man these
 
 int	move_past_specifier(const char **format, t_box *box, int *len_value)
 {
