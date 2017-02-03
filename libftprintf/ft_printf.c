@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 08:37:06 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 08:50:33 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -526,7 +526,8 @@ char	*o_pound_handler(char *value, t_box *box, uintmax_t ustorage)
 		value[i - 1] = '0';
 		return (value);
 	}
-	else if (box->pound_flag > 0 && value[i] != ' ' && ustorage != 0)
+	else if (box->pound_flag > 0 && value[i] != ' ' &&
+			(ustorage != 0 || box->precision > -1))
 		return (ft_strjoin("0", value));
 
 	return (value);
