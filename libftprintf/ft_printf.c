@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 08:26:51 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 08:33:33 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -580,6 +580,12 @@ void	specifier_update(t_box *box)
 		//ft_putstr("you got here");
 		//ft_putchar(box->specifier);
 	}
+	if (box->specifier == 'p')
+	{
+		box->pound_flag = 1;
+		box->specifier = 'x';
+	}
+
 
 }
 
@@ -760,27 +766,9 @@ char	*d_i_printer(char *value, t_box *box, va_list *param_list)
 	if (value[box->field_width] == ' ')
 		value[box->field_width] = '\0';
 
-	// space first, put space in front of number
-	// zero, if precision, doesn't work
-	//zero or space put in a plus if plus, if minus, not zero
-	//value = str_field_width_handler(box, value);
-	//value = d_i_flag_handler(box, value, storage);
-	/*
-	if (box->minus_flag > 0)
-		left_align_number(value);
-	else if (box->zero_flag > 0)
-		zero_flag_handler(value);
-	*/
-	//pound handler
-	//alignment
-	//zero fill
-	//d_i_precision_handler(box, &value);
-	//value = flag_handler(box, value, storage);
-
 	return (value);
 }
 
-//zero case, precision, width, pound handler, alignment, zero fill
 
 int		print_spec(t_box *box, va_list *param_list)
 {
