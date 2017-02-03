@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:39:51 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:41:31 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -764,6 +764,32 @@ char	*d_i_printer(char *value, t_box *box, va_list *param_list)
 	return (value);
 }
 
+char	*p_printer(char *value, t_box *box, va_list *param_list)
+{
+	uintmax_t	ustorage;
+
+	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
+	if (ustorage != 0)
+		value = pf_ubig_itoa_base(ustorage, 16);
+	else if (ustorage == 0 && box->precision == 0 && box->field_width < 1)
+		return (ft_strnew(0));
+	else if (ustorage == 0 && box->precision == -1)
+	{
+		value = ft_getz(value);
+		return (value);
+	}
+	else
+		value = ft_strnew(0);
+	if (box->pound_flag > 0 && ustorage != 0)
+		value = ft_strstick("0x", value, 0);
+	value = field_width_handler(box, value);
+	precision_handler(box, &value);
+	value = oxX_flag_handler(box, value);
+	if (box->specifier == 'X')
+		str_toupper(value);
+
+	return (value);
+}
 
 int		print_spec(t_box *box, va_list *param_list)
 {
@@ -782,7 +808,7 @@ int		print_spec(t_box *box, va_list *param_list)
 		value = d_i_printer(value, box, param_list);
 	else if (c == 'o')
 		value = o_printer(value, box, param_list);
-	else if (c == 'x' || c == 'X' c == 'p')
+	else if (c == 'x' || c == 'X')
 		value = x_printer(value, box, param_list);
 	else if (c == 's' || c == 'S')
 		value = str_printer(box, param_list, value);
@@ -791,7 +817,7 @@ int		print_spec(t_box *box, va_list *param_list)
 	else if (c == 'u' || c == 'U')
 		value = u_printer(box, param_list, value);
 	else if (c == 'p')
-		value = NULL;
+		value = p_printer(char *value, t_box *box, va_list *param_list);
 
 	if (value == NULL)
 	{
