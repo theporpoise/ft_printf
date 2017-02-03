@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:48:16 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:49:42 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -770,7 +770,7 @@ char	*p_printer(char *value, t_box *box, va_list *param_list)
 
 
 	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
-	debug_print_struct_data(box);
+	//debug_print_struct_data(box);
 
 	if (ustorage != 0)
 		value = pf_ubig_itoa_base(ustorage, 16);
