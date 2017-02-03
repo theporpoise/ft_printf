@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:52:14 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:54:27 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,7 +434,8 @@ void	left_align_str(char *value)
 char	*str_printer(t_box *box, va_list *param_list, char *value)
 {
 
-	value = va_arg(*param_list, char *);
+	value = (char *)(wint_t *)va_arg(*param_list, wint_t *);
+	//value = va_arg(*param_list, char *);
 
 	if (value == NULL)
 		return (value);
