@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:41:31 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:42:36 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -817,7 +817,7 @@ int		print_spec(t_box *box, va_list *param_list)
 	else if (c == 'u' || c == 'U')
 		value = u_printer(box, param_list, value);
 	else if (c == 'p')
-		value = p_printer(char *value, t_box *box, va_list *param_list);
+		value = p_printer(value, box, param_list);
 
 	if (value == NULL)
 	{
