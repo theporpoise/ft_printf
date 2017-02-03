@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:37:42 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:39:51 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -782,7 +782,7 @@ int		print_spec(t_box *box, va_list *param_list)
 		value = d_i_printer(value, box, param_list);
 	else if (c == 'o')
 		value = o_printer(value, box, param_list);
-	else if (c == 'x' || c == 'X')
+	else if (c == 'x' || c == 'X' c == 'p')
 		value = x_printer(value, box, param_list);
 	else if (c == 's' || c == 'S')
 		value = str_printer(box, param_list, value);
