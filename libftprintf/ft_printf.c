@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:42:36 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:48:16 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -582,7 +582,7 @@ void	specifier_update(t_box *box)
 	if (box->specifier == 'p')
 	{
 		box->pound_flag = 1;
-		box->len_modifier = '3';
+		box->len_modifier = 3;
 	}
 
 
@@ -768,7 +768,10 @@ char	*p_printer(char *value, t_box *box, va_list *param_list)
 {
 	uintmax_t	ustorage;
 
+
 	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
+	debug_print_struct_data(box);
+
 	if (ustorage != 0)
 		value = pf_ubig_itoa_base(ustorage, 16);
 	else if (ustorage == 0 && box->precision == 0 && box->field_width < 1)
