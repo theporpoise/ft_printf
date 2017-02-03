@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:51:01 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:52:14 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -772,6 +772,8 @@ char	*p_printer(char *value, t_box *box, va_list *param_list)
 	ustorage = ouxX_type_mod(box, (va_arg(*param_list, uintmax_t)));
 	//debug_print_struct_data(box);
 
+	value = pf_ubig_itoa_base(ustorage, 16);
+	/*
 	if (ustorage != 0)
 		value = pf_ubig_itoa_base(ustorage, 16);
 	else if (ustorage == 0 && box->precision == 0 && box->field_width < 1)
@@ -783,6 +785,7 @@ char	*p_printer(char *value, t_box *box, va_list *param_list)
 	}
 	else
 		value = ft_strnew(0);
+	*/
 	if (box->pound_flag > 0)
 		value = ft_strstick("0x", value, 0);
 	value = field_width_handler(box, value);
