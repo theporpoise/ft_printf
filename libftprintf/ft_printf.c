@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/02 13:47:57 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 08:26:51 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ char	*x_printer(char *value, t_box *box, va_list *param_list)
 	if (ustorage != 0)
 		value = pf_ubig_itoa_base(ustorage, 16);
 	else if (ustorage == 0 && box->precision == 0 && box->field_width < 1)
-		return (NULL);
+		return (ft_strnew(0));
 	else if (ustorage == 0 && box->precision == -1)
 	{
 		value = ft_getz(value);
@@ -435,12 +435,16 @@ char	*str_printer(t_box *box, va_list *param_list, char *value)
 {
 
 	value = va_arg(*param_list, char *);
-	value = str_precision_handler(box, value);
-	value = str_field_width_handler(box, value);
-	if (box->minus_flag > 0)
-		left_align_str(value);
+
 	if (value == NULL)
-		ft_putstr("(null)");
+		return (value);
+	else
+	{
+		value = str_precision_handler(box, value);
+		value = str_field_width_handler(box, value);
+		if (box->minus_flag > 0)
+			left_align_str(value);
+	}
 
 	return (value);
 }
@@ -726,12 +730,25 @@ void	d_i_zero_flag_handler(t_box *box, char *value)
 	}
 }
 
+uintmax_t	absolute_value(intmax_t storage)
+{
+	uintmax_t		ret;
+
+	ret = -(storage);
+	return (ret);
+}
+
 char	*d_i_printer(char *value, t_box *box, va_list *param_list)
 {
 	intmax_t	storage;
 
 	storage = d_i_type_mod(box, (va_arg(*param_list, intmax_t)));
-	value = pf_big_itoa_base(storage, 10);
+	if (storage < 0)
+		value = pf_ubig_itoa_base(absolute_value(storage), 10);
+	else
+		value = pf_big_itoa_base(storage, 10);
+	if (storage < 0 && (ft_strchr(value, '-') == NULL))
+		value = ft_strstick("-", value, 0);
 	value = d_i_precision_handler(box, &value, storage);
 	value = str_field_width_handler(box, value);
 	if (box->minus_flag > 0)
@@ -784,16 +801,25 @@ int		print_spec(t_box *box, va_list *param_list)
 		value = o_printer(value, box, param_list);
 	else if (c == 'x' || c == 'X')
 		value = x_printer(value, box, param_list);
-	else if (c == 's')
+	else if (c == 's' || c == 'S')
 		value = str_printer(box, param_list, value);
 	else if (c == 'c')
 		value = c_printer(box, param_list, value, &print_len);
 	else if (c == 'u' || c == 'U')
 		value = u_printer(box, param_list, value);
 
-	ft_putstr(value);
-	print_len += ft_strlen(value);
-	return (value == NULL ? 0 : print_len);
+	if (value == NULL)
+	{
+		ft_putstr("(null)");
+		print_len += 6;
+	}
+	else
+	{
+		ft_putstr(value);
+		print_len += ft_strlen(value);
+	}
+	return (print_len);
+	//return (value == NULL ? 0 : print_len);
 }
 
 // wctmb, wcstmbs man these
@@ -835,7 +861,9 @@ int	ft_printf(const char *format, ...)
 	while(*format != '\0')
 	{
 		if (move_past_specifier(&format, box, &len_value))
+		{
 			len_value += print_spec(box, &param_list);
+		}
 	}
 	//DEBUG CODE
 	//debug_print_struct_data(box);
