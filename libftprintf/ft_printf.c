@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 08:50:33 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:01:44 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,7 @@ char	*x_printer(char *value, t_box *box, va_list *param_list)
 	}
 	else
 		value = ft_strnew(0);
-	if (box->pound_flag > 0 && ustorage != 0)
+	if (box->pound_flag > 0 && (ustorage != 0 || box->specifier != 'p'))
 		value = ft_strstick("0x", value, 0);
 	value = field_width_handler(box, value);
 	precision_handler(box, &value);
@@ -584,7 +584,7 @@ void	specifier_update(t_box *box)
 	if (box->specifier == 'p')
 	{
 		box->pound_flag = 1;
-		box->specifier = 'x';
+		box->len_modifier = 'l';
 	}
 
 
@@ -613,11 +613,7 @@ char	*d_i_precision_handler(t_box *box, char **value, intmax_t storage)
 		new = ft_strnew(box->precision - num_digits);
 		ft_memset(new, '0', (box->precision - num_digits));
 		new = ft_strjoin(new, *value);
-/*
-		ft_putstr("you are here\n");
-		ft_putstr(new);
-		ft_putstr("you are here\n");
-*/
+
 		return (new);
 	}
 
@@ -788,7 +784,7 @@ int		print_spec(t_box *box, va_list *param_list)
 		value = d_i_printer(value, box, param_list);
 	else if (c == 'o')
 		value = o_printer(value, box, param_list);
-	else if (c == 'x' || c == 'X')
+	else if (c == 'x' || c == 'X' || c == 'p')
 		value = x_printer(value, box, param_list);
 	else if (c == 's' || c == 'S')
 		value = str_printer(box, param_list, value);
