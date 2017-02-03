@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:06:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:07:02 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,7 @@ char	*x_printer(char *value, t_box *box, va_list *param_list)
 char	*pf_strnewchar(size_t size, char any)
 {
 	size_t	i;
-	cihar	*str;
+	char	*str;
 
 	i = 0;
 	str = (char *)malloc(size + 1);
