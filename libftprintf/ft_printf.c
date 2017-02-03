@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:03:49 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:06:12 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,7 @@ char	*x_printer(char *value, t_box *box, va_list *param_list)
 char	*pf_strnewchar(size_t size, char any)
 {
 	size_t	i;
-	char	*str;
+	cihar	*str;
 
 	i = 0;
 	str = (char *)malloc(size + 1);
@@ -578,13 +578,11 @@ void	specifier_update(t_box *box)
 	{
 		box->len_modifier = 3;
 		box->specifier = ft_tolower(box->specifier);
-		//ft_putstr("you got here");
-		//ft_putchar(box->specifier);
 	}
 	if (box->specifier == 'p')
 	{
 		box->pound_flag = 1;
-		box->len_modifier = 'l';
+		box->len_modifier = '3';
 	}
 
 
