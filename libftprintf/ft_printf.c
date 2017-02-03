@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:14:57 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/03 09:49:42 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/03 09:51:01 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -783,7 +783,7 @@ char	*p_printer(char *value, t_box *box, va_list *param_list)
 	}
 	else
 		value = ft_strnew(0);
-	if (box->pound_flag > 0 && ustorage != 0)
+	if (box->pound_flag > 0)
 		value = ft_strstick("0x", value, 0);
 	value = field_width_handler(box, value);
 	precision_handler(box, &value);
