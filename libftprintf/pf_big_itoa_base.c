@@ -6,10 +6,9 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 07:05:19 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/30 09:19:44 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/05 12:13:38 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -17,19 +16,11 @@
 
 static void	ft_make_nbr(char *blank_string, int len, intmax_t n, int base)
 {
-	int i;
-	char *lookup = "0123456789abcdef";
+	int		i;
+	char	*lookup;
 
-	// uint_max 4294967295
-	// ffffffff00000000
-	//
+	lookup = "0123456789abcdef";
 	i = 0;
-	/*
-	if (n == -4294967296)
-	{
-		n = n / base;
-	}
-	*/
 	if (n < 0)
 	{
 		blank_string[i] = '-';
@@ -59,7 +50,7 @@ static int	get_size(intmax_t n, int base)
 	return (len);
 }
 
-char	*pf_big_itoa_base(intmax_t n, int base)
+char		*pf_big_itoa_base(intmax_t n, int base)
 {
 	int			len;
 	intmax_t	copy;

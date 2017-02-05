@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 07:05:19 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/30 10:18:41 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/05 11:53:36 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 
 static void	ft_make_nbr(char *blank_string, int len, uintmax_t n, int base)
 {
-	int i;
-	char *lookup = "0123456789abcdef";
+	int		i;
+	char	*lookup;
 
+	lookup = "0123456789abcdef";
 	i = 0;
 	while (n != 0)
 	{
@@ -42,7 +43,7 @@ static int	get_size(uintmax_t n, int base)
 	return (len);
 }
 
-char	*pf_ubig_itoa_base(uintmax_t n, int base)
+char		*pf_ubig_itoa_base(uintmax_t n, int base)
 {
 	int			len;
 	uintmax_t	copy;

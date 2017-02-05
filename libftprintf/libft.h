@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 11:38:24 by mgould            #+#    #+#             */
-/*   Updated: 2017/01/30 09:20:50 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/05 14:23:20 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <string.h>
 # include <stdint.h>
+# include <stdarg.h>
 
 typedef struct		s_list
 {
@@ -50,6 +51,48 @@ void				pf_put_big_nbr(intmax_t n);
 char				*pf_big_itoa(intmax_t n);
 char				*pf_big_itoa_base(intmax_t n, int base);
 char				*pf_ubig_itoa_base(uintmax_t n, int base);
+void				left_align_str(char *value);
+char				*ft_strstick(char *prepend, char *original, int index);
+int					digit_counter(char *str);
+void				left_align_number(char *value);
+void				zero_flag_handler(char *value);
+void				str_toupper(char *value);
+char				*pf_strnewchar(size_t size, char any);
+int					digit_count(char *value);
+uintmax_t			absolute_value(intmax_t storage);
+char				*d_i_precision_handler(t_box *box, char **value, \
+		intmax_t storage);
+char				*d_i_flag_handler(t_box *box, char *value, \
+		intmax_t storage);
+char				*d_i_space_plus_handler(t_box *box, char *value, \
+		intmax_t storage);
+char				*d_i_negative_handler(char *value, intmax_t storage);
+void				d_i_zero_flag_handler(t_box *box, char *value);
+char				*d_i_printer(char *value, t_box *box, va_list *param_list);
+intmax_t			d_i_type_mod(t_box *box, intmax_t storage);
+intmax_t			oux_type_mod(t_box *box, uintmax_t storage);
+char				*str_field_width_handler(t_box *box, char *value);
+char				*field_width_handler(t_box *box, char *value);
+void				precision_handler(t_box *box, char **value);
+char				*flag_handler(t_box *box, char *value, intmax_t storage);
+char				*ox_flag_handler(t_box *box, char *value);
+char				*x_printer(char *value, t_box *box, va_list *param_list);
+char				*o_precision_handler(t_box *box, char **value);
+char				*o_pound_handler(char *value, t_box *box, \
+		uintmax_t ustorage);
+char				*o_printer(char *value, t_box *box, va_list *param_list);
+char				*str_printer(t_box *box, va_list *param_list, char *value);
+char				*char_field_width_handler(t_box *box, char *value);
+char				*c_printer(t_box *box, va_list *param_list, char *v, \
+		int *l);
+char				*u_printer(t_box *box, va_list *param_list, char *value);
+char				*p_printer(char *value, t_box *box, va_list *param_list);
+char				*percent_printer(char *value, t_box *box);
+void				specifier_update(t_box *box);
+int					print_spec(t_box *box, va_list *param_list);
+int					move_past_specifier(const char **format, t_box *box, \
+		int *len_value);
+char				*d_i_negative_handler(char *value, intmax_t storage);
 
 /*
 ** extern variables
