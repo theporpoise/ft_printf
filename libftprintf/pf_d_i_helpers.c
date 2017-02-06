@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 09:32:20 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 14:07:36 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 10:16:51 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,26 @@ char	*d_i_precision_handler(t_box *box, char **value, intmax_t storage)
 {
 	int		num_digits;
 	int		str_len;
-	int		minus_flag;
 	char	*new;
 
 	new = NULL;
 	if (*value == NULL)
 		return (*value);
-	minus_flag = 0;
 	num_digits = digit_counter(*value);
 	str_len = ft_strlen(*value);
 	if (box->precision == 0 && storage == 0)
 	{
 		new = ft_strnew(0);
+		free(*value);
 		return (new);
 	}
 	if (box->precision > num_digits)
 	{
 		new = ft_strnew(box->precision - num_digits);
 		ft_memset(new, '0', (box->precision - num_digits));
+		//
 		new = ft_strjoin(new, *value);
+		free(*value);
 		return (new);
 	}
 	return (*value);
@@ -74,6 +75,8 @@ char	*d_i_flag_handler(t_box *box, char *value, intmax_t storage)
 	return (value);
 }
 
+//pass pointer to value here so you can free it
+
 char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
 {
 	int i;
@@ -85,6 +88,7 @@ char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
 			*value = ' ';
 		if (*value != ' ' && *value != '-')
 			value = ft_strjoin(" ", value);
+		//
 	}
 	if (box->plus_flag > 0 && storage >= 0)
 	{
@@ -99,6 +103,7 @@ char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
 		}
 		else
 			value = ft_strjoin("+", value);
+		//
 	}
 	return (value);
 }

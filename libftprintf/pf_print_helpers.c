@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/06 09:22:26 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 11:08:15 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ void		specifier_update(t_box *box)
 			|| box->specifier == 'C' || box->specifier == 'S')
 	{
 		box->len_modifier = 3;
-		box->specifier = ft_tolower(box->specifier);
+		//
+		if (box->specifier != 'S')
+			box->specifier = ft_tolower(box->specifier);
 	}
 	if (box->specifier == 'p')
 	{
@@ -51,9 +53,14 @@ void		specifier_update(t_box *box)
 
 //updated here to pass a pointer, causing free issues.
 
-static int	null_check_and_print(char **value, int *print_len)
+static int	null_check_and_print(char **value, int *print_len, t_box *box)
 {
-	if (*value == NULL)
+	if (*value == NULL && box->specifier == 'S')
+	{
+		*print_len += -1;
+		ft_putstr("(null)");
+	}
+	else if (*value == NULL)
 	{
 		ft_putstr("(null)");
 		*print_len += 6;
@@ -93,7 +100,7 @@ int			print_spec(t_box *box, va_list *param_list)
 		value = u_printer(box, param_list, value);
 	else if (c == 'p')
 		value = p_printer(value, box, param_list);
-	return (null_check_and_print(&value, &print_len));
+	return (null_check_and_print(&value, &print_len, box));
 }
 
 int			move_past_specifier(const char **format, t_box *box, int *len_value)
