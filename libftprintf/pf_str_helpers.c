@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:37:15 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 14:10:56 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 09:27:08 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,15 @@ char	*str_precision_handler(t_box *box, char *value)
 
 char	*str_printer(t_box *box, va_list *param_list, char *value)
 {
-	value = (char *)(wint_t *)va_arg(*param_list, wint_t *);
-	// this is failing ftprintf.com, return something other than NULLc
+	value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
+	//value = (char *)(wint_t *)va_arg(*param_list, wint_t *);
+	// this is failing ftprintf.com, return something other than NULL
 	if (value == NULL)
 		return (value);
 	else
 	{
+		//
+		value = ft_strdup(value);
 		value = str_precision_handler(box, value);
 		value = str_field_width_handler(box, value);
 		if (box->minus_flag > 0)

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 14:18:21 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 09:22:26 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,20 @@ void		specifier_update(t_box *box)
 	}
 }
 
-static int	null_check_and_print(char *value, int *print_len)
+//updated here to pass a pointer, causing free issues.
+
+static int	null_check_and_print(char **value, int *print_len)
 {
-	if (value == NULL)
+	if (*value == NULL)
 	{
 		ft_putstr("(null)");
 		*print_len += 6;
 	}
 	else
 	{
-		ft_putstr(value);
-		*print_len += ft_strlen(value);
+		ft_putstr(*value);
+		*print_len += ft_strlen(*value);
+		free(*value);
 	}
 	return (*print_len);
 }
@@ -90,7 +93,7 @@ int			print_spec(t_box *box, va_list *param_list)
 		value = u_printer(box, param_list, value);
 	else if (c == 'p')
 		value = p_printer(value, box, param_list);
-	return (null_check_and_print(value, &print_len));
+	return (null_check_and_print(&value, &print_len));
 }
 
 int			move_past_specifier(const char **format, t_box *box, int *len_value)
