@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:37:15 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 14:10:37 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 15:05:56 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <wchar.h>
+
+//
+#include <string.h>
 
 char	*str_precision_handler(t_box *box, char *value)
 {
@@ -37,13 +40,13 @@ char	*str_precision_handler(t_box *box, char *value)
 
 char	*str_printer(t_box *box, va_list *param_list, char *value)
 {
-	//value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
-	//value = (char *)(wint_t *)va_arg(*param_list, wint_t *);
-	// this is failing ftprintf.com, return something other than NULL
-	//if (value == NULL && box->specifier == 'S')
-	//	return (value = ft_strnew(0));
-	//if (value == NULL)
-	//	return (value);
+	size_t i;
+	int j;
+
+	i = 0;
+	j = 3;
+
+
 	if (box->specifier == 's')
 	{
 		value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
@@ -57,7 +60,6 @@ char	*str_printer(t_box *box, va_list *param_list, char *value)
 	}
 	else if (box->specifier == 'S')
 	{
-
 		value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
 		if (value == NULL)
 			return (value);

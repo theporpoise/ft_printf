@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:23:06 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 14:10:39 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 15:06:36 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ char	*char_field_width_handler(t_box *box, char *value)
 char	*c_printer(t_box *box, va_list *param_list, char *v, int *l)
 {
 	v = ft_strnew(1);
-	// this is also failint printf.com for null values, check it
 	if (box->specifier == 'C' || box->len_modifier == 'l')
 	{
 		v[0] = (char)(wint_t)va_arg(*param_list, wint_t);
@@ -61,7 +60,6 @@ char	*c_printer(t_box *box, va_list *param_list, char *v, int *l)
 	}
 	else if (box->specifier == 'c')
 	{
-		//v[0] = (char)(wint_t)va_arg(*param_list, wint_t);
 		v[0] = va_arg(*param_list, int);
 		if (v[0] == 0)
 		{
