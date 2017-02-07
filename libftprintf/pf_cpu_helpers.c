@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:23:06 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 12:14:11 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 12:41:26 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,27 @@ char	*c_printer(t_box *box, va_list *param_list, char *v, int *l)
 {
 	v = ft_strnew(1);
 	// this is also failint printf.com for null values, check it
+	if (box->specifier == 'C')
+	{
+		v[0] = (char)(wint_t)va_arg(*param_list, wint_t);
+		if (v[0] == '\0')
+			*l += 1;
+		v = char_field_width_handler(box, v);
+		if (box->minus_flag > 0)
+			left_align_str(v);
+	}
+	else
+	{
+		v[0] = (char)(wint_t)va_arg(*param_list, wint_t);
+		if (v[0] == '\0')
+			*l += 1;
+		v = char_field_width_handler(box, v);
+		if (box->minus_flag > 0)
+			left_align_str(v);
+	}
+
+	return (v);
+	/*
 	v[0] = (char)(wint_t)va_arg(*param_list, wint_t);
 	if (v[0] == '\0')
 		*l += 1;
@@ -57,6 +78,7 @@ char	*c_printer(t_box *box, va_list *param_list, char *v, int *l)
 	if (box->minus_flag > 0)
 		left_align_str(v);
 	return (v);
+	*/
 }
 
 char	*u_printer(t_box *box, va_list *param_list, char *value)

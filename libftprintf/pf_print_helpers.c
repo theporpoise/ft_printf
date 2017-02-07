@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/06 16:50:38 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 12:41:27 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void		specifier_update(t_box *box)
 	{
 		box->len_modifier = 3;
 		//
-		if (box->specifier != 'S')
+		if (box->specifier != 'S' && box->specifier != 'C')
 			box->specifier = ft_tolower(box->specifier);
 	}
 	if (box->specifier == 'p')
@@ -50,16 +50,6 @@ void		specifier_update(t_box *box)
 		box->len_modifier = 3;
 	}
 }
-
-//updated here to pass a pointer, causing free issues.
-/*
-#include <unistd.h>
-
-static void	ft_putwchar(wchar_t c)
-{
-	write(1, &c, 1);
-}
-*/
 
 static int	null_check_and_print(char **value, int *print_len, t_box *box)
 {
@@ -70,8 +60,6 @@ static int	null_check_and_print(char **value, int *print_len, t_box *box)
 	{
 		*print_len = -1;
 		ft_putstr("(null)");
-		//ft_putnbr(*print_len);
-		//ft_putstr("FIRED\n");
 	}
 	else if (*value == NULL)
 	{
@@ -107,7 +95,7 @@ int			print_spec(t_box *box, va_list *param_list)
 		value = x_printer(value, box, param_list);
 	else if (c == 's' || c == 'S')
 		value = str_printer(box, param_list, value);
-	else if (c == 'c')
+	else if (c == 'c' || c == 'C')
 		value = c_printer(box, param_list, value, &print_len);
 	else if (c == 'u' || c == 'U')
 		value = u_printer(box, param_list, value);
