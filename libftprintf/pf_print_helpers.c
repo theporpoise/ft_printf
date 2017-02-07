@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 15:25:22 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 15:27:29 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,23 +59,17 @@ static int	null_check_and_print(char **value, int *print_len, t_box *box)
 	{
 		*print_len = -1;
 		ft_putstr("(null)");
-		//ft_putstr("here 1\n");
 	}
 	else if (*value == NULL)
 	{
 		ft_putstr("(null)");
 		*print_len += 6;
-		//ft_putstr("here 2\n");
 	}
 	else
 	{
 		ft_putstr(*value);
 		*print_len += ft_strlen(*value);
-		//
-		if (**value == '@' && box->specifier == 'S')
-			*print_len += 1;
 		free(*value);
-		//ft_putstr("here 3\n");
 	}
 	return (*print_len);
 }
