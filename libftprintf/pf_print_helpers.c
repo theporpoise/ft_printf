@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/06 12:20:02 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 16:50:38 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ static int	null_check_and_print(char **value, int *print_len, t_box *box)
 	{
 		*print_len = -1;
 		ft_putstr("(null)");
+		//ft_putnbr(*print_len);
+		//ft_putstr("FIRED\n");
 	}
 	else if (*value == NULL)
 	{

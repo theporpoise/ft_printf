@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:37:15 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/06 16:23:41 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 16:30:16 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ char	*str_printer(t_box *box, va_list *param_list, char *value)
 	value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
 	//value = (char *)(wint_t *)va_arg(*param_list, wint_t *);
 	// this is failing ftprintf.com, return something other than NULL
-	if (value == NULL && box->specifier == 'S')
-		return (value = ft_strnew(0));
-	else if (value == NULL)
+	//if (value == NULL && box->specifier == 'S')
+	//	return (value = ft_strnew(0));
+	if (value == NULL)
 		return (value);
 	else
 	{
