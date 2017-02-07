@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/06 11:08:15 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:20:02 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,23 @@ void		specifier_update(t_box *box)
 }
 
 //updated here to pass a pointer, causing free issues.
+/*
+#include <unistd.h>
+
+static void	ft_putwchar(wchar_t c)
+{
+	write(1, &c, 1);
+}
+*/
 
 static int	null_check_and_print(char **value, int *print_len, t_box *box)
 {
+	int i;
+
+	i = 0;
 	if (*value == NULL && box->specifier == 'S')
 	{
-		*print_len += -1;
+		*print_len = -1;
 		ft_putstr("(null)");
 	}
 	else if (*value == NULL)
