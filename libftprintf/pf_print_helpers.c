@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 13:38:54 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 15:25:22 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,9 @@ static int	null_check_and_print(char **value, int *print_len, t_box *box)
 	{
 		ft_putstr(*value);
 		*print_len += ft_strlen(*value);
+		//
+		if (**value == '@' && box->specifier == 'S')
+			*print_len += 1;
 		free(*value);
 		//ft_putstr("here 3\n");
 	}

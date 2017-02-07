@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:37:15 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 15:15:24 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 15:24:00 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ char	*str_printer(t_box *box, va_list *param_list, char *value)
 		value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
 		if (value == NULL)
 			return (value);
+		if (*value == '@')
+			ft_putstr("@");
 		value = ft_strdup(value);
 		value = str_precision_handler(box, value);
 		value = str_field_width_handler(box, value);
