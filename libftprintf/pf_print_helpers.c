@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:33:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 12:41:27 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 12:42:25 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void		specifier_update(t_box *box)
 			|| box->specifier == 'C' || box->specifier == 'S')
 	{
 		box->len_modifier = 3;
-		//
 		if (box->specifier != 'S' && box->specifier != 'C')
 			box->specifier = ft_tolower(box->specifier);
 	}
