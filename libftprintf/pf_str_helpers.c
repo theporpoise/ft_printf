@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:37:15 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 15:05:56 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 15:15:24 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ char	*str_printer(t_box *box, va_list *param_list, char *value)
 
 	if (box->specifier == 's')
 	{
-		value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
+		//value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
+		value = va_arg(*param_list, char *);
 		if (value == NULL)
 			return (value);
 		value = ft_strdup(value);
