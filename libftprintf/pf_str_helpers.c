@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:37:15 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 15:36:40 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 16:17:53 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <wchar.h>
-
-//
-#include <string.h>
 
 char	*str_precision_handler(t_box *box, char *value)
 {
@@ -40,16 +37,8 @@ char	*str_precision_handler(t_box *box, char *value)
 
 char	*str_printer(t_box *box, va_list *param_list, char *value)
 {
-	size_t i;
-	int j;
-
-	i = 0;
-	j = 3;
-
-
 	if (box->specifier == 's')
 	{
-		//value = (char *)(wchar_t *)va_arg(*param_list, wchar_t *);
 		value = va_arg(*param_list, char *);
 		if (value == NULL)
 			return (value);

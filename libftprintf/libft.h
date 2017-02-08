@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 11:38:24 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 14:23:20 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 16:16:53 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,6 @@ char				*d_i_negative_handler(char *value, intmax_t storage);
 extern const char	*g_len_mod[];
 extern const char	*g_specifier;
 extern const char	*g_flags;
-
-// debug function DELETE THIS LATER
-void				debug_print_struct_data(t_box *box);
-void				debug_d_i_ints();
-void				debug_d_i_len_mod();
-void				debug_d_i_precision();
-void				debug_d_i_space();
-void				debug_d_i_plus();
-void				debug_d_i_pound();
-// debug functions delete this late and remove functions
 
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));

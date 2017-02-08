@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 11:23:06 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/07 15:06:36 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 16:17:13 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ char	*c_printer(t_box *box, va_list *param_list, char *v, int *l)
 		if (box->minus_flag > 0)
 			left_align_str(v);
 	}
-
 	return (v);
-
 }
 
 char	*u_printer(t_box *box, va_list *param_list, char *value)

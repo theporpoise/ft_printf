@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 08:19:56 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 12:20:26 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 16:43:09 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_strstick(char *prepend, char *original, int index)
 		j++;
 		i++;
 	}
-	free(original);
+	ft_strdel(&original);
 	return (new);
 }
 

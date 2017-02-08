@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 09:32:20 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/06 10:16:51 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 16:59:13 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ char	*d_i_precision_handler(t_box *box, char **value, intmax_t storage)
 	int		num_digits;
 	int		str_len;
 	char	*new;
+	char	*ret;
 
 	new = NULL;
 	if (*value == NULL)
@@ -33,17 +34,16 @@ char	*d_i_precision_handler(t_box *box, char **value, intmax_t storage)
 	if (box->precision == 0 && storage == 0)
 	{
 		new = ft_strnew(0);
-		free(*value);
+		ft_strdel(value);
 		return (new);
 	}
 	if (box->precision > num_digits)
 	{
 		new = ft_strnew(box->precision - num_digits);
 		ft_memset(new, '0', (box->precision - num_digits));
-		//
-		new = ft_strjoin(new, *value);
-		free(*value);
-		return (new);
+		ret = ft_strstick(new, *value, 0);
+		ft_strdel(&new);
+		return (ret);
 	}
 	return (*value);
 }
@@ -75,8 +75,6 @@ char	*d_i_flag_handler(t_box *box, char *value, intmax_t storage)
 	return (value);
 }
 
-//pass pointer to value here so you can free it
-
 char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
 {
 	int i;
@@ -87,8 +85,7 @@ char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
 		if (*value == '0' && digit_count(value) > box->precision)
 			*value = ' ';
 		if (*value != ' ' && *value != '-')
-			value = ft_strjoin(" ", value);
-		//
+			value = ft_strstick(" ", value, 0);
 	}
 	if (box->plus_flag > 0 && storage >= 0)
 	{
@@ -102,8 +99,7 @@ char	*d_i_space_plus_handler(t_box *box, char *value, intmax_t storage)
 			value[i - 1] = '+';
 		}
 		else
-			value = ft_strjoin("+", value);
-		//
+			value = ft_strstick("+", value, 0);
 	}
 	return (value);
 }

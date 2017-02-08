@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/05 09:52:43 by mgould            #+#    #+#             */
-/*   Updated: 2017/02/05 13:59:54 by mgould           ###   ########.fr       */
+/*   Updated: 2017/02/07 16:59:11 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*str_field_width_handler(t_box *box, char *value)
 		}
 		giver[j] = '\0';
 		ft_strcat(giver, value);
+		ft_strdel(&value);
 		return (giver);
 	}
 	return (value);
